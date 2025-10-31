@@ -1,0 +1,29 @@
+import React from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Layout from './pages/Layout';
+import Home from './pages/Home';
+import PostJobPage from './pages/PostJobPage';
+import SignUpPage from './pages/SignUpPage';
+import SignInPage from './pages/SignInPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import UserDashboard from './Dashboard/UserDashboard';
+import EmployerDashboard from './Dashboard/EmployerDashboard';
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<Layout></Layout>}>
+          <Route index element={<Home />} />
+          <Route path="postJob" element={<PostJobPage />} />
+          <Route path='login' element={<SignInPage />}/>
+          <Route path='sign' element={<SignUpPage></SignUpPage>}/>
+          <Route path='forgot' element={<ForgotPasswordPage></ForgotPasswordPage>}/>
+          <Route path='user_dashboard' element={<UserDashboard></UserDashboard>}/>
+          <Route path='employer_dashboard' element={<EmployerDashboard></EmployerDashboard>}/>
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  )
+}
+
+export default App
