@@ -8,18 +8,22 @@ import SignInPage from './pages/SignInPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import UserDashboard from './Dashboard/UserDashboard';
 import EmployerDashboard from './Dashboard/EmployerDashboard';
+import JobDetailsPage from './pages/JobDetailsPage';
+import BrowseJobsPage from './pages/BrowseJobsPage';
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Layout></Layout>}>
           <Route index element={<Home />} />
-          <Route path="postJob" element={<PostJobPage />} />
+          <Route path="post-job" element={<PostJobPage />} />
           <Route path='login' element={<SignInPage />}/>
           <Route path='sign' element={<SignUpPage></SignUpPage>}/>
           <Route path='forgot' element={<ForgotPasswordPage></ForgotPasswordPage>}/>
           <Route path='user_dashboard' element={<UserDashboard></UserDashboard>}/>
           <Route path='employer_dashboard' element={<EmployerDashboard></EmployerDashboard>}/>
+          <Route path='JobDetailsPage' element={<JobDetailsPage></JobDetailsPage>}/>
+          <Route path='jobs' element={<BrowseJobsPage></BrowseJobsPage>}/>
         </Route>
       </Routes>
     </BrowserRouter>
