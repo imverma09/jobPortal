@@ -1,6 +1,17 @@
 import React from 'react'
 import { Menu, X, Briefcase, Search, Bell, User, ChevronDown, Home, FileText, Building2, LogIn } from 'lucide-react';
+import { useEffect, useState } from "react";
+import  {BACKEND_API} from "../backendApi"
+import { Link } from 'react-router-dom';
 function Hom() {
+  const [jobs, setJobs] = useState([]);
+  useEffect(() => {
+    fetch(`${BACKEND_API}/api/data/getjob`) // your backend URL
+      .then((res) => res.json())
+      .then((data) => setJobs(data))
+      .catch((err) => console.error("Error fetching jobs:", err));
+  }, []);
+ 
   return (
     <>
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -56,19 +67,21 @@ function Hom() {
         <div className="mt-16">
           <h2 className="text-3xl font-bold text-gray-900 mb-8">Featured Jobs</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-shadow">
+            {jobs.map((j) => (
+              <div key={j} className="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-shadow">
                 <div className="flex items-start justify-between mb-4">
                   <div className="h-12 w-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
                     <Building2 className="h-6 w-6 text-white" />
                   </div>
-                  <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">Full-time</span>
+                  <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">{j.jobType}</span>
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Senior Developer</h3>
-                <p className="text-gray-600 mb-4">Tech Company Inc.</p>
+                <Link to={"JobDetailsPage"}>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">{j.jobTitle}</h3>
+                </Link>
+                <p className="text-gray-600 mb-4">{j.companyName}</p>
                 <div className="flex items-center justify-between text-sm text-gray-500">
-                  <span>📍 New York, NY</span>
-                  <span>💰 $120k - $150k</span>
+                  <span>📍 {j.location} </span>
+                  <span>💰 ₹ {j.salary}k</span>
                 </div>
                 <button className="w-full mt-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2 rounded-lg font-medium hover:shadow-lg transition-shadow">
                   Apply Now

@@ -23,7 +23,7 @@ function Navbar() {
                 <Home className="h-4 w-4" />
                 <span>Home</span>
               </Link>
-              <Link to={"/"} className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 transition-colors font-medium">
+              <Link to={"jobs"} className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 transition-colors font-medium">
                 <Search className="h-4 w-4" />
                 <span>Find Jobs</span>
               </Link>
@@ -56,7 +56,7 @@ function Navbar() {
 
               
               </div>
-                <Link  to={"postJob"}>
+                <Link  to={"post-job"}>
               <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-lg font-medium hover:shadow-lg transform hover:scale-105 transition-all">
                 Post a Job
               </button>

@@ -21,9 +21,11 @@ export default function SignInPage() {
 
   const handleSubmit = async() => {
      try {
-      const res = await axios.post(`${BACKEND_API}/api/users/login`, formData);
+      const res = await axios.post(`${BACKEND_API}/api/users/login`, formData,{
+        withCredentials : true 
+      });
       showSuccess(res.data.message);
-      console.log(res.data)
+      localStorage.setItem("userID" , res.data?.user?.id)   
       setFormData({email: "",password: "",})
     } catch (error) {
       console.log(error)

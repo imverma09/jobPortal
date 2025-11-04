@@ -1,6 +1,7 @@
 import React , { useState } from 'react';
 import { Briefcase, ChevronRight, ChevronLeft, Check, Building2, MapPin, DollarSign, Clock, Users, FileText, Tag, Mail, Phone, Globe } from 'lucide-react';
-
+import { BACKEND_API  , showError , showSuccess} from '../backendApi';
+import axios from 'axios';
 export default function PostJobPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
@@ -42,9 +43,20 @@ export default function PostJobPage() {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    let createdBy =  localStorage.getItem("userID")
+    if(!createdBy){
+      return showError("plz login your Account !") 
+    }
+    try {
+          const res = await axios.post(`${BACKEND_API}/api/data/postJob`, {...formData , createdBy});
+          showSuccess(res.data.message);
+        } catch (error) {
+          console.log(error)
+          showError(error.response?.data?.message || "Error submitting form");
+        }
     console.log('Job Posted:', formData);
-    alert('Job posted successfully! 🎉');
+    // alert('Job posted successfully! 🎉');
   };
 
   return (
@@ -175,7 +187,7 @@ export default function PostJobPage() {
                       name="salary"
                       value={formData.salary}
                       onChange={handleInputChange}
-                      placeholder="e.g. $80k - $120k"
+                      placeholder="e.g. ₹80k - ₹120k"
                       className="flex-1 px-4 py-3 rounded-lg bg-[#EDE6E3] text-[#36382E] outline-none border-2 border-[#DADAD9] focus:border-[#5BC3EB] transition-colors"
                     />
                     <select

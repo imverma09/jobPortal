@@ -57,11 +57,10 @@ router.post("/login", async (req, res) => {
       { expiresIn: "2h" }                 // token expires in 2 hours
     );
 
-
  res.cookie('token', token, {
       httpOnly: true,
       secure: false,
-      sameSite: 'Lax',
+      sameSite: "None",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
     res.status(200).json({
@@ -78,7 +77,5 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 });
-
-
 
 module.exports = router

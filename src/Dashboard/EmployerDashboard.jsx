@@ -1,6 +1,6 @@
 import  React , { useState } from 'react';
 import { Briefcase, User, Bell, LogOut, Menu, X, Home, FileText, Users, Settings, Edit, Trash2, Eye, Clock, Plus, TrendingUp, MapPin, DollarSign, Building2, Search, Filter, CheckCircle, XCircle } from 'lucide-react';
-
+import { Link } from 'react-router-dom';
 export default function EmployerDashboard() {
   const [activeTab, setActiveTab] = useState('overview');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -272,10 +272,12 @@ export default function EmployerDashboard() {
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
                   <h1 className="text-3xl font-bold text-[#36382E]">Job Postings</h1>
+                  <Link to="post-job">
                   <button className="bg-[#F06449] text-white px-6 py-3 rounded-lg font-bold hover:shadow-lg transform hover:scale-105 transition-all flex items-center space-x-2">
                     <Plus className="h-5 w-5" />
                     <span>Post New Job</span>
                   </button>
+                  </Link>
                 </div>
 
                 <div className="space-y-4">
