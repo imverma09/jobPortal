@@ -1,10 +1,11 @@
 import React , { useState } from 'react';
 import { Briefcase, User, Bell, LogOut, Menu, X, Home, FileText, Bookmark, Settings, Edit, Trash2, Eye, Clock, CheckCircle, XCircle, TrendingUp, MapPin, DollarSign, Building2 } from 'lucide-react';
-
+import { useSelector } from 'react-redux';
 export default function UserDashboard() {
   const [activeTab, setActiveTab] = useState('overview');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
+  const {userInfo} = useSelector((state)=> state.auth)
+  
   const applications = [
     { id: 1, company: 'Tech Corp', position: 'Senior Developer', status: 'pending', appliedDate: '2025-10-20', salary: '$120k - $150k', location: 'New York, NY' },
     { id: 2, company: 'Design Studio', position: 'UI/UX Designer', status: 'interview', appliedDate: '2025-10-18', salary: '$90k - $110k', location: 'San Francisco, CA' },
@@ -41,35 +42,6 @@ export default function UserDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#EDE6E3] via-[#DADAD9] to-[#EDE6E3]">
       {/* Top Navigation */}
-      {/* <nav className="bg-[#36382E] shadow-xl sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-2">
-              <div className="bg-[#5BC3EB] p-2 rounded-lg shadow-lg">
-                <Briefcase className="h-6 w-6 text-[#36382E]" />
-              </div>
-              <span className="text-2xl font-bold text-[#5BC3EB]">JobPortal</span>
-            </div>
-
-            <div className="hidden md:flex items-center space-x-4">
-              <button className="relative p-2 text-[#EDE6E3] hover:text-[#5BC3EB] transition-colors">
-                <Bell className="h-5 w-5" />
-                <span className="absolute top-1 right-1 h-2 w-2 bg-[#F06449] rounded-full"></span>
-              </button>
-              <div className="flex items-center space-x-3 px-4 py-2 bg-[#36382E]/50 rounded-lg">
-                <div className="h-8 w-8 bg-[#5BC3EB] rounded-full flex items-center justify-center">
-                  <User className="h-5 w-5 text-[#36382E]" />
-                </div>
-                <span className="text-[#EDE6E3] font-medium">John Doe</span>
-              </div>
-              <button className="p-2 text-[#EDE6E3] hover:text-[#F06449] transition-colors">
-                <LogOut className="h-5 w-5" />
-              </button>
-            </div>
-
-          </div>
-        </div>
-      </nav> */}
             <button 
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="md:hidden p-2 rounded-lg text-[#e04908]"
@@ -86,8 +58,8 @@ export default function UserDashboard() {
                 <div className="h-24 w-24 bg-[#5BC3EB] rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
                   <User className="h-12 w-12 text-[#36382E]" />
                 </div>
-                <h2 className="text-xl font-bold text-[#36382E]">John Doe</h2>
-                <p className="text-[#36382E]/70">john@example.com</p>
+                <h2 className="text-xl font-bold text-[#36382E]">{userInfo?.fullName || "user"}</h2>
+                <p className="text-[#36382E]/70">{userInfo?.email || "user@gmail.com"}</p>
                 <button className="mt-4 text-[#5BC3EB] hover:text-[#36382E] font-medium text-sm flex items-center space-x-1 mx-auto">
                   <Edit className="h-4 w-4" />
                   <span>Edit Profile</span>
