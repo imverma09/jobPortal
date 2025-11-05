@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 function Hom() {
   const [jobs, setJobs] = useState([]);
   useEffect(() => {
-    fetch(`${BACKEND_API}/api/data/getjob`) // your backend URL
+    fetch(`${BACKEND_API}/api/data/getjob`) 
       .then((res) => res.json())
       .then((data) => setJobs(data))
       .catch((err) => console.error("Error fetching jobs:", err));

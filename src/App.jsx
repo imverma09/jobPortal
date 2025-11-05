@@ -10,7 +10,17 @@ import UserDashboard from './Dashboard/UserDashboard';
 import EmployerDashboard from './Dashboard/EmployerDashboard';
 import JobDetailsPage from './pages/JobDetailsPage';
 import BrowseJobsPage from './pages/BrowseJobsPage';
+import { useDispatch } from 'react-redux';
+import { fetchUserInfo } from './store/Slice/UserSlice';
+import { useEffect } from 'react';
 function App() {
+   const dispatch =   useDispatch()
+   useEffect(()=>{
+      dispatch(fetchUserInfo())
+   }, [])
+
+
+
   return (
     <BrowserRouter>
       <Routes>

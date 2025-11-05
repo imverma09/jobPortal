@@ -1,8 +1,13 @@
 import React ,  {useState} from 'react'
-import { Menu , X, Briefcase, Search, Bell, User, ChevronDown, Home, FileText, Building2, LogIn } from 'lucide-react';
+import { Menu , X, Briefcase, Search, Bell, User, ChevronDown, Home, FileText, Building2, LogIn, LogOut } from 'lucide-react';
 import { Link } from 'react-router-dom';
-function Navbar() {
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { logoutUser } from '../store/Slice/UserSlice';
+function Navbar() { 
+ const {userInfo} =   useSelector((state)=> state.auth)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const dispatch =   useDispatch()
   return (
      <nav className="bg-white shadow-lg sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -31,10 +36,24 @@ function Navbar() {
                 <Building2 className="h-4 w-4" />
                 <span>Companies</span>
               </Link>
-               <Link to="login" className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 transition-colors font-medium">
+              {
+                userInfo.email ? (
+                  <button onClick={()=>{
+                    dispatch(logoutUser())
+                  }} className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 transition-colors font-medium">
+                <LogOut className="h-4 w-4" />
+                <span>logout</span>
+              </button>
+                ):(
+                 
+                   <Link to="login" className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 transition-colors font-medium">
                 <LogIn className="h-4 w-4" />
                 <span>Login</span>
               </Link>
+                  
+                )
+              }
+              
             </div>
             {/* Right Side Icons */}
             <div className="hidden md:flex items-center space-x-4">
@@ -44,7 +63,7 @@ function Navbar() {
               </button>
               
               <div className="relative">
-                <Link to={"user_dashboard"} className='cursor-pointer'>
+                <Link to={ userInfo.userType == "jobseeker" ?"user_dashboard" : "employer_dashboard"} className='cursor-pointer'>
                 <button 
                   className="flex items-center space-x-2 p-2 hover:bg-gray-100 rounded-lg transition-colors"
                   >

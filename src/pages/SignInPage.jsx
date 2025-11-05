@@ -1,10 +1,13 @@
 import React , { useState } from 'react';
 import { Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
+import { useDispatch } from 'react-redux';
 import {Link} from "react-router-dom" ; 
 import axios from 'axios';
 import { BACKEND_API , showError , showSuccess } from '../backendApi';
+import { setCredentials } from '../store/Slice/UserSlice';
 export default function SignInPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const dispatch =  useDispatch()
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -24,8 +27,10 @@ export default function SignInPage() {
       const res = await axios.post(`${BACKEND_API}/api/users/login`, formData,{
         withCredentials : true 
       });
+
       showSuccess(res.data.message);
-      localStorage.setItem("userID" , res.data?.user?.id)   
+      dispatch(setCredentials(res.data.user))
+      localStorage.setItem("userID" , res.data?.user?.id)
       setFormData({email: "",password: "",})
     } catch (error) {
       console.log(error)
