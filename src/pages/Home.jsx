@@ -12,7 +12,7 @@ function Hom() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center">
           <h1 className="text-5xl font-bold text-gray-900 mb-4">
-            Find Your <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Dream Job</span>
+            Find Your <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Dream Jobs</span>
           </h1>
           <p className="text-xl text-gray-600 mb-8">Discover thousands of opportunities from top companies</p>
           
