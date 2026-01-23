@@ -1,17 +1,12 @@
 import React from 'react'
-import { Menu, X, Briefcase, Search, Bell, User, ChevronDown, Home, FileText, Building2, LogIn } from 'lucide-react';
+import { Search, Building2 } from 'lucide-react';
 import { useEffect, useState } from "react";
 import  {BACKEND_API} from "../backendApi"
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 function Hom() {
-  const [jobs, setJobs] = useState([]);
-  useEffect(() => {
-    fetch(`${BACKEND_API}/api/data/getjob`) 
-      .then((res) => res.json())
-      .then((data) => setJobs(data))
-      .catch((err) => console.error("Error fetching jobs:", err));
-  }, []);
- 
+  let {jobs , isLoading , isError} =  useSelector((state)=> state.job)
+
   return (
     <>
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
