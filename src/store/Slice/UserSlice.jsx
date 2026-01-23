@@ -16,6 +16,7 @@ export const logoutUser = createAsyncThunk("logoutUser" , async () => {
             withCredentials : true
         })
         console.log((await res).data)
+        localStorage.removeItem("userID")
         return (await res).data
     } catch (error) {
         console.log(error)
@@ -65,5 +66,6 @@ const authSlice =  createSlice({
         })
     }
 })
+
 export const {setCredentials , logout} = authSlice.actions
 export default authSlice.reducer

@@ -12,15 +12,15 @@ import JobDetailsPage from './pages/JobDetailsPage';
 import BrowseJobsPage from './pages/BrowseJobsPage';
 import { useDispatch } from 'react-redux';
 import { fetchUserInfo } from './store/Slice/UserSlice';
+import { fetchJob } from './store/Slice/JobSlice';
 import { useEffect } from 'react';
 function App() {
    const dispatch =   useDispatch()
    useEffect(()=>{
       dispatch(fetchUserInfo())
+      dispatch(fetchJob())
    }, [])
-
-
-
+   
   return (
     <BrowserRouter>
       <Routes>
