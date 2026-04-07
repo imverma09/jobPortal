@@ -15,25 +15,25 @@ import { fetchUserInfo } from './store/Slice/UserSlice';
 import { fetchJob } from './store/Slice/JobSlice';
 import { useEffect } from 'react';
 function App() {
-   const dispatch =   useDispatch()
-   useEffect(()=>{
-      dispatch(fetchUserInfo())
-      dispatch(fetchJob())
-   }, [])
-   
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(fetchUserInfo())
+    dispatch(fetchJob())
+  }, [])
+
   return (
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Layout></Layout>}>
           <Route index element={<Home />} />
           <Route path="post-job" element={<PostJobPage />} />
-          <Route path='login' element={<SignInPage />}/>
-          <Route path='sign' element={<SignUpPage></SignUpPage>}/>
-          <Route path='forgot' element={<ForgotPasswordPage></ForgotPasswordPage>}/>
-          <Route path='user_dashboard' element={<UserDashboard></UserDashboard>}/>
-          <Route path='employer_dashboard' element={<EmployerDashboard></EmployerDashboard>}/>
-          <Route path='JobDetailsPage' element={<JobDetailsPage></JobDetailsPage>}/>
-          <Route path='jobs' element={<BrowseJobsPage></BrowseJobsPage>}/>
+          <Route path='login' element={<SignInPage />} />
+          <Route path='sign' element={<SignUpPage></SignUpPage>} />
+          <Route path='forgot' element={<ForgotPasswordPage></ForgotPasswordPage>} />
+          <Route path='user_dashboard' element={<UserDashboard></UserDashboard>} />
+          <Route path='employer_dashboard' element={<EmployerDashboard></EmployerDashboard>} />
+          <Route path='JobDetailsPage/:jobId' element={<JobDetailsPage></JobDetailsPage>} />
+          <Route path='jobs' element={<BrowseJobsPage></BrowseJobsPage>} />
         </Route>
       </Routes>
     </BrowserRouter>

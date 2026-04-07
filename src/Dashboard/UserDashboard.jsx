@@ -1,11 +1,11 @@
-import React , { useState } from 'react';
+import React, { useState } from 'react';
 import { Briefcase, User, Bell, LogOut, Menu, X, Home, FileText, Bookmark, Settings, Edit, Trash2, Eye, Clock, CheckCircle, XCircle, TrendingUp, MapPin, DollarSign, Building2 } from 'lucide-react';
 import { useSelector } from 'react-redux';
 export default function UserDashboard() {
   const [activeTab, setActiveTab] = useState('overview');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const {userInfo} = useSelector((state)=> state.auth)
-  
+  const { userInfo } = useSelector((state) => state.auth)
+
   const applications = [
     { id: 1, company: 'Tech Corp', position: 'Senior Developer', status: 'pending', appliedDate: '2025-10-20', salary: '$120k - $150k', location: 'New York, NY' },
     { id: 2, company: 'Design Studio', position: 'UI/UX Designer', status: 'interview', appliedDate: '2025-10-18', salary: '$90k - $110k', location: 'San Francisco, CA' },
@@ -42,12 +42,12 @@ export default function UserDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#EDE6E3] via-[#DADAD9] to-[#EDE6E3]">
       {/* Top Navigation */}
-            <button 
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg text-[#e04908]"
-            >
-              {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
+      <button
+        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        className="md:hidden p-2 rounded-lg text-[#e04908]"
+      >
+        {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+      </button>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -69,44 +69,40 @@ export default function UserDashboard() {
               <nav className="space-y-2">
                 <button
                   onClick={() => setActiveTab('overview')}
-                  className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${
-                    activeTab === 'overview'
+                  className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'overview'
                       ? 'bg-[#5BC3EB] text-[#36382E] font-bold'
                       : 'text-[#36382E]/70 hover:bg-[#EDE6E3]'
-                  }`}
+                    }`}
                 >
                   <Home className="h-5 w-5" />
                   <span>Overview</span>
                 </button>
                 <button
                   onClick={() => setActiveTab('applications')}
-                  className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${
-                    activeTab === 'applications'
+                  className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'applications'
                       ? 'bg-[#5BC3EB] text-[#36382E] font-bold'
                       : 'text-[#36382E]/70 hover:bg-[#EDE6E3]'
-                  }`}
+                    }`}
                 >
                   <FileText className="h-5 w-5" />
                   <span>My Applications</span>
                 </button>
                 <button
                   onClick={() => setActiveTab('saved')}
-                  className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${
-                    activeTab === 'saved'
+                  className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'saved'
                       ? 'bg-[#5BC3EB] text-[#36382E] font-bold'
                       : 'text-[#36382E]/70 hover:bg-[#EDE6E3]'
-                  }`}
+                    }`}
                 >
                   <Bookmark className="h-5 w-5" />
                   <span>Saved Jobs</span>
                 </button>
                 <button
                   onClick={() => setActiveTab('settings')}
-                  className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${
-                    activeTab === 'settings'
+                  className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'settings'
                       ? 'bg-[#5BC3EB] text-[#36382E] font-bold'
                       : 'text-[#36382E]/70 hover:bg-[#EDE6E3]'
-                  }`}
+                    }`}
                 >
                   <Settings className="h-5 w-5" />
                   <span>Settings</span>
@@ -291,7 +287,7 @@ export default function UserDashboard() {
                       <label className="block text-[#36382E] font-medium mb-2">Full Name</label>
                       <input
                         type="text"
-                        defaultValue="John Doe"
+                        defaultValue={userInfo?.fullName || "user"}
                         className="w-full px-4 py-3 rounded-lg bg-[#EDE6E3] text-[#36382E] outline-none border-2 border-[#DADAD9] focus:border-[#5BC3EB] transition-colors"
                       />
                     </div>
@@ -299,7 +295,8 @@ export default function UserDashboard() {
                       <label className="block text-[#36382E] font-medium mb-2">Email</label>
                       <input
                         type="email"
-                        defaultValue="john@example.com"
+                        defaultValue={userInfo?.email || "user@example.com"}
+                        value={userInfo?.email}
                         className="w-full px-4 py-3 rounded-lg bg-[#EDE6E3] text-[#36382E] outline-none border-2 border-[#DADAD9] focus:border-[#5BC3EB] transition-colors"
                       />
                     </div>
@@ -308,6 +305,7 @@ export default function UserDashboard() {
                       <input
                         type="tel"
                         defaultValue="+1 (555) 123-4567"
+                        value={userInfo?.phone}
                         className="w-full px-4 py-3 rounded-lg bg-[#EDE6E3] text-[#36382E] outline-none border-2 border-[#DADAD9] focus:border-[#5BC3EB] transition-colors"
                       />
                     </div>
@@ -317,7 +315,7 @@ export default function UserDashboard() {
                   </div>
                 </div>
 
-                <div className="bg-white rounded-2xl shadow-xl p-6 border-2 border-[#DADAD9]">
+                {/* <div className="bg-white rounded-2xl shadow-xl p-6 border-2 border-[#DADAD9]">
                   <h2 className="text-xl font-bold text-[#36382E] mb-4">Notifications</h2>
                   <div className="space-y-4">
                     <label className="flex items-center justify-between">
@@ -333,7 +331,7 @@ export default function UserDashboard() {
                       <input type="checkbox" defaultChecked className="h-5 w-5 rounded text-[#5BC3EB]" />
                     </label>
                   </div>
-                </div>
+                </div> */}
               </div>
             )}
           </div>

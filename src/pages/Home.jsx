@@ -1,36 +1,35 @@
 import React from 'react'
 import { Search, Building2 } from 'lucide-react';
-import { useEffect, useState } from "react";
-import  {BACKEND_API} from "../backendApi"
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 function Hom() {
-  let {jobs , isLoading , isError} =  useSelector((state)=> state.job)
+
+  let { jobs, isLoading, isError } = useSelector((state) => state.job)
 
   return (
     <>
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center">
           <h1 className="text-5xl font-bold text-gray-900 mb-4">
             Find Your <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Dream Jobs</span>
           </h1>
           <p className="text-xl text-gray-600 mb-8">Discover thousands of opportunities from top companies</p>
-          
+
           {/* Search Bar */}
           <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl p-4">
             <div className="flex flex-col md:flex-row gap-4">
               <div className="flex-1 flex items-center space-x-3 px-4 py-3 bg-gray-50 rounded-lg">
                 <Search className="h-5 w-5 text-gray-400" />
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   placeholder="Job title, keywords, or company"
                   className="flex-1 bg-transparent outline-none text-gray-700"
                 />
               </div>
               <div className="flex-1 flex items-center space-x-3 px-4 py-3 bg-gray-50 rounded-lg">
                 <Building2 className="h-5 w-5 text-gray-400" />
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   placeholder="City or state"
                   className="flex-1 bg-transparent outline-none text-gray-700"
                 />
@@ -71,7 +70,7 @@ function Hom() {
                   <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">{j.jobType}</span>
                 </div>
                 <Link to={"JobDetailsPage"}>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">{j.jobTitle}</h3>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">{j.jobTitle}</h3>
                 </Link>
                 <p className="text-gray-600 mb-4">{j.companyName}</p>
                 <div className="flex items-center justify-between text-sm text-gray-500">
@@ -85,8 +84,8 @@ function Hom() {
             ))}
           </div>
         </div>
-        </div>
-      
+      </div>
+
     </>
   )
 }

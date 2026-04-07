@@ -7,6 +7,7 @@ const mongoose = require("mongoose")
 const otpRouter = require('./router/Otp');
 const userRouter = require('./router/userRoutes');
 const jobRouter = require('./router/jobs');
+const applicationRouter = require('./router/applications');
 const cookiesParser = require('cookie-parser');
 dotenv.config()
 app.use(cors({
@@ -19,6 +20,7 @@ app.use(cookiesParser())
 app.use("/api/user" ,  otpRouter)
 app.use("/api/users" ,  userRouter)
 app.use("/api/data" ,  jobRouter)
+app.use("/api/applications", applicationRouter)
 
 mongoose.connect(process.env.MONGO_URI)
 .then(()=>{
