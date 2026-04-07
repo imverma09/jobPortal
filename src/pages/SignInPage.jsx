@@ -41,10 +41,8 @@ export default function SignInPage() {
   };
 
   const handleGoogleSignIn = () => {
-    console.log('Google Sign In clicked');
-    alert('Google Sign In would be implemented here!');
+    showError('Google Sign In is not implemented yet. coming soon!');
   };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#EDE6E3] via-[#DADAD9] to-[#EDE6E3] flex items-center justify-center p-4">
       <div className="w-full max-w-md">

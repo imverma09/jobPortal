@@ -1,10 +1,10 @@
-import  React , { useState } from 'react';
+import React, { useState } from 'react';
 import { Briefcase, User, Bell, LogOut, Menu, X, Home, FileText, Users, Settings, Edit, Trash2, Eye, Clock, Plus, TrendingUp, MapPin, DollarSign, Building2, Search, Filter, CheckCircle, XCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 export default function EmployerDashboard() {
+
   const [activeTab, setActiveTab] = useState('overview');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
   const jobPostings = [
     { id: 1, title: 'Senior Developer', applications: 45, views: 320, status: 'active', posted: '2025-10-15', location: 'New York, NY', salary: '$120k - $150k' },
     { id: 2, title: 'UI/UX Designer', applications: 32, views: 250, status: 'active', posted: '2025-10-18', location: 'San Francisco, CA', salary: '$90k - $110k' },
@@ -57,47 +57,12 @@ export default function EmployerDashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#EDE6E3] via-[#DADAD9] to-[#EDE6E3]">
-      {/* Top Navigation */}
-      {/* <nav className="bg-[#36382E] shadow-xl sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-2">
-              <div className="bg-[#F06449] p-2 rounded-lg shadow-lg">
-                <Briefcase className="h-6 w-6 text-white" />
-              </div>
-              <span className="text-2xl font-bold text-[#5BC3EB]">JobPortal</span>
-              <span className="text-sm text-[#EDE6E3]/70 hidden sm:block">Employer</span>
-            </div>
-
-            <div className="hidden md:flex items-center space-x-4">
-              <button className="bg-[#F06449] text-white px-6 py-2 rounded-lg font-bold hover:shadow-lg transform hover:scale-105 transition-all flex items-center space-x-2">
-                <Plus className="h-5 w-5" />
-                <span>Post New Job</span>
-              </button>
-              <button className="relative p-2 text-[#EDE6E3] hover:text-[#5BC3EB] transition-colors">
-                <Bell className="h-5 w-5" />
-                <span className="absolute top-1 right-1 h-2 w-2 bg-[#F06449] rounded-full"></span>
-              </button>
-              <div className="flex items-center space-x-3 px-4 py-2 bg-[#36382E]/50 rounded-lg">
-                <div className="h-8 w-8 bg-[#F06449] rounded-full flex items-center justify-center">
-                  <Building2 className="h-5 w-5 text-white" />
-                </div>
-                <span className="text-[#EDE6E3] font-medium">Tech Corp</span>
-              </div>
-              <button className="p-2 text-[#EDE6E3] hover:text-[#F06449] transition-colors">
-                <LogOut className="h-5 w-5" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav> */}
-
-            <button 
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg text-[#ed5412]"
-            >
-              {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
+      <button
+        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        className="md:hidden p-2 rounded-lg text-[#ed5412]"
+      >
+        {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+      </button>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -119,44 +84,40 @@ export default function EmployerDashboard() {
               <nav className="space-y-2">
                 <button
                   onClick={() => setActiveTab('overview')}
-                  className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${
-                    activeTab === 'overview'
-                      ? 'bg-[#F06449] text-white font-bold'
-                      : 'text-[#36382E]/70 hover:bg-[#EDE6E3]'
-                  }`}
+                  className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'overview'
+                    ? 'bg-[#F06449] text-white font-bold'
+                    : 'text-[#36382E]/70 hover:bg-[#EDE6E3]'
+                    }`}
                 >
                   <Home className="h-5 w-5" />
                   <span>Overview</span>
                 </button>
                 <button
                   onClick={() => setActiveTab('jobs')}
-                  className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${
-                    activeTab === 'jobs'
-                      ? 'bg-[#F06449] text-white font-bold'
-                      : 'text-[#36382E]/70 hover:bg-[#EDE6E3]'
-                  }`}
+                  className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'jobs'
+                    ? 'bg-[#F06449] text-white font-bold'
+                    : 'text-[#36382E]/70 hover:bg-[#EDE6E3]'
+                    }`}
                 >
                   <FileText className="h-5 w-5" />
                   <span>Job Postings</span>
                 </button>
                 <button
                   onClick={() => setActiveTab('applicants')}
-                  className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${
-                    activeTab === 'applicants'
-                      ? 'bg-[#F06449] text-white font-bold'
-                      : 'text-[#36382E]/70 hover:bg-[#EDE6E3]'
-                  }`}
+                  className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'applicants'
+                    ? 'bg-[#F06449] text-white font-bold'
+                    : 'text-[#36382E]/70 hover:bg-[#EDE6E3]'
+                    }`}
                 >
                   <Users className="h-5 w-5" />
                   <span>Applicants</span>
                 </button>
                 <button
                   onClick={() => setActiveTab('settings')}
-                  className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${
-                    activeTab === 'settings'
-                      ? 'bg-[#F06449] text-white font-bold'
-                      : 'text-[#36382E]/70 hover:bg-[#EDE6E3]'
-                  }`}
+                  className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'settings'
+                    ? 'bg-[#F06449] text-white font-bold'
+                    : 'text-[#36382E]/70 hover:bg-[#EDE6E3]'
+                    }`}
                 >
                   <Settings className="h-5 w-5" />
                   <span>Settings</span>
@@ -273,10 +234,10 @@ export default function EmployerDashboard() {
                 <div className="flex items-center justify-between">
                   <h1 className="text-3xl font-bold text-[#36382E]">Job Postings</h1>
                   <Link to="post-job">
-                  <button className="bg-[#F06449] text-white px-6 py-3 rounded-lg font-bold hover:shadow-lg transform hover:scale-105 transition-all flex items-center space-x-2">
-                    <Plus className="h-5 w-5" />
-                    <span>Post New Job</span>
-                  </button>
+                    <button className="bg-[#F06449] text-white px-6 py-3 rounded-lg font-bold hover:shadow-lg transform hover:scale-105 transition-all flex items-center space-x-2">
+                      <Plus className="h-5 w-5" />
+                      <span>Post New Job</span>
+                    </button>
                   </Link>
                 </div>
 
