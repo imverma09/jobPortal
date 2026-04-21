@@ -26,6 +26,7 @@ function Hom() {
                   className="flex-1 bg-transparent outline-none text-gray-700"
                 />
               </div>
+
               <div className="flex-1 flex items-center space-x-3 px-4 py-3 bg-gray-50 rounded-lg">
                 <Building2 className="h-5 w-5 text-gray-400" />
                 <input

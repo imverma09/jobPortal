@@ -14,11 +14,13 @@ import { useDispatch } from 'react-redux';
 import { fetchUserInfo } from './store/Slice/UserSlice';
 import { fetchJob } from './store/Slice/JobSlice';
 import { useEffect } from 'react';
+import ProtectedRoute from './pages/ProtectedRoute';
 function App() {
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(fetchUserInfo())
     dispatch(fetchJob())
+
   }, [])
 
   return (
@@ -26,12 +28,12 @@ function App() {
       <Routes>
         <Route path='/' element={<Layout></Layout>}>
           <Route index element={<Home />} />
-          <Route path="post-job" element={<PostJobPage />} />
+          <Route path="post-job" element={<ProtectedRoute><PostJobPage /></ProtectedRoute>} />
           <Route path='login' element={<SignInPage />} />
           <Route path='sign' element={<SignUpPage></SignUpPage>} />
           <Route path='forgot' element={<ForgotPasswordPage></ForgotPasswordPage>} />
-          <Route path='user_dashboard' element={<UserDashboard></UserDashboard>} />
-          <Route path='employer_dashboard' element={<EmployerDashboard></EmployerDashboard>} />
+          <Route path='user_dashboard' element={<ProtectedRoute><UserDashboard></UserDashboard></ProtectedRoute>} />
+          <Route path='employer_dashboard' element={<ProtectedRoute><EmployerDashboard></EmployerDashboard></ProtectedRoute>} />
           <Route path='JobDetailsPage/:jobId' element={<JobDetailsPage></JobDetailsPage>} />
           <Route path='jobs' element={<BrowseJobsPage></BrowseJobsPage>} />
         </Route>

@@ -1,11 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { BACKEND_API } from "../../backendApi";
+import { BACKEND_API } from "../../Helper/backendApi";
 
 export const fetchJob = createAsyncThunk("fetchJob", async (__, { rejectWithValue }) => {
     try {
         const res = await axios.get(`${BACKEND_API}/api/data/getjob`)
-        console.log(res.data)
         return res.data
     } catch (error) {
         return rejectWithValue(error.message)

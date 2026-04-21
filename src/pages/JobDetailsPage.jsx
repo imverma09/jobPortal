@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Briefcase, ArrowLeft, MapPin, DollarSign, Clock, Users, Building2, Share2, Bookmark, CheckCircle, Calendar, TrendingUp, Mail, Phone, Globe, Award, Target, X, Loader2 } from 'lucide-react';
+import { Briefcase, ArrowLeft, MapPin, Eye, Clock, Users, Building2, Share2, Bookmark, CheckCircle, Calendar, TrendingUp, Mail, Phone, Globe, Award, Target, X, Loader2, CloudCog, IndianRupee } from 'lucide-react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { BACKEND_API, showError, showSuccess } from '../backendApi';
+import { BACKEND_API, showError, showSuccess } from '../Helper/backendApi';
+import { formatDate, formatSalary, formatExperience, formatJobType, formatCategory, timeAgo } from '../Helper/jobDetails';
+import { toggleSaveJob } from '../store/Slice/ApplicationSlice';
+import { useDispatch } from 'react-redux';
 export default function JobDetailsPage() {
+  const dispatch =  useDispatch()
   const { jobId } = useParams();
   const navigate = useNavigate();
   let { userInfo } = useSelector((state) => state.auth)
-
-
   const { jobs } = useSelector((state) => state.job);
   const jobDetails = jobs.find((job) => job._id === jobId);
-
+  console.log(jobDetails)
   const [isSaved, setIsSaved] = useState(false);
   const [showApplicationModal, setShowApplicationModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -24,13 +26,31 @@ export default function JobDetailsPage() {
     coverLetter: '',
   });
 
+   function handelSaveJob(){
+       setIsSaved(!isSaved)
+       dispatch(toggleSaveJob(jobId))
+   }  
+
+   async function getViewJob(){
+      try {
+        let response =  await axios.get(`${BACKEND_API}/api/view/${jobId}`, {
+          withCredentials: true
+        })
+        // console.log(response.data)
+      } catch (error) {
+        console.error("Error fetching job view:", error)
+      }
+   }
+
   useEffect(() => {
     setFormData({
       fullName: userInfo.fullName,
       email: userInfo.email,
       phone: userInfo.phone,
     })
+    getViewJob()
   }, [userInfo])
+
 
   const handleInputChange = (e) => {
     setFormData({
@@ -39,7 +59,14 @@ export default function JobDetailsPage() {
     });
   };
 
+
   const handleSubmitApplication = async () => {
+
+    if (!userInfo) {
+      showError("You are not logged in as a job seeker")
+      navigate("/login")
+      return
+    }
     if (!formData.fullName || !formData.email) {
       showError('Full name and email are required');
       return;
@@ -63,11 +90,11 @@ export default function JobDetailsPage() {
         withCredentials: true,
         headers: { 'Content-Type': 'multipart/form-data' },
       });
-
       showSuccess(res.data.message || 'Application submitted successfully! 🎉');
       setShowApplicationModal(false);
       setResumeFile(null);
     } catch (err) {
+      console.log(err)
       const msg = err.response?.data?.message || 'Failed to submit application';
       showError(msg);
     } finally {
@@ -75,61 +102,7 @@ export default function JobDetailsPage() {
     }
   };
 
-  // --- Helper functions ---
-  const formatDate = (dateStr) => {
-    if (!dateStr) return 'N/A';
-    const date = new Date(dateStr);
-    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-  };
 
-  const formatSalary = (salary, salaryType) => {
-    if (!salary) return 'Not disclosed';
-    const symbol = '$';
-    const typeLabel = salaryType === 'yearly' ? '/yr' : salaryType === 'monthly' ? '/mo' : salaryType === 'hourly' ? '/hr' : '';
-    return `${symbol}${Number(salary).toLocaleString()}${typeLabel}`;
-  };
-
-  const formatExperience = (exp) => {
-    const map = {
-      entry: 'Entry Level',
-      mid: 'Mid Level',
-      senior: 'Senior Level',
-      lead: 'Lead',
-      fresher: 'Fresher',
-    };
-    return map[exp] || exp || 'N/A';
-  };
-
-  const formatJobType = (type) => {
-    const map = {
-      fulltime: 'Full Time',
-      parttime: 'Part Time',
-      contract: 'Contract',
-      internship: 'Internship',
-      remote: 'Remote',
-      freelance: 'Freelance',
-    };
-    return map[type] || type || 'N/A';
-  };
-
-  const formatCategory = (cat) => {
-    if (!cat) return 'N/A';
-    return cat.charAt(0).toUpperCase() + cat.slice(1);
-  };
-
-  const timeAgo = (dateStr) => {
-    if (!dateStr) return 'N/A';
-    const now = new Date();
-    const posted = new Date(dateStr);
-    const diffMs = now - posted;
-    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-    if (diffDays === 0) return 'Today';
-    if (diffDays === 1) return '1 day ago';
-    if (diffDays < 30) return `${diffDays} days ago`;
-    const diffMonths = Math.floor(diffDays / 30);
-    if (diffMonths === 1) return '1 month ago';
-    return `${diffMonths} months ago`;
-  };
 
   // --- Loading / Not Found ---
   if (!jobDetails) {
@@ -195,12 +168,20 @@ export default function JobDetailsPage() {
                         <TrendingUp className="h-4 w-4" />
                         <span>{formatExperience(jobDetails.experience)}</span>
                       </span>
+                      <span className="flex items-center space-x-1 text-[#36382E]/70">
+                        <Eye className="h-4 w-4" />
+                        <span>{jobDetails.views}</span>
+                      </span>
+                      <span className="flex items-center space-x-1 text-[#36382E]/70">
+                        <Users className="h-4 w-4" />
+                        <span>{jobDetails.applied}</span>
+                      </span>
                     </div>
                   </div>
                 </div>
                 <div className="flex space-x-2">
                   <button
-                    onClick={() => setIsSaved(!isSaved)}
+                    onClick={handelSaveJob}
                     className={`p-3 rounded-lg transition-all ${isSaved
                       ? 'bg-[#F06449] text-white'
                       : 'bg-[#EDE6E3] text-[#36382E] hover:bg-[#DADAD9]'
@@ -218,7 +199,7 @@ export default function JobDetailsPage() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                 <div className="bg-[#5BC3EB]/10 rounded-lg p-4 border-2 border-[#5BC3EB]/20">
                   <div className="flex items-center space-x-2 text-[#5BC3EB] mb-1">
-                    <DollarSign className="h-5 w-5" />
+                    <IndianRupee className="h-5 w-5" />
                     <span className="font-bold text-sm">Salary</span>
                   </div>
                   <p className="text-[#36382E] font-bold">{formatSalary(jobDetails.salary, jobDetails.salaryType)}</p>
@@ -329,7 +310,7 @@ export default function JobDetailsPage() {
                 {isDeadlinePassed ? 'Application Closed' : 'Apply for this Job'}
               </button>
               <button
-                onClick={() => setIsSaved(!isSaved)}
+                onClick={handelSaveJob}
                 className={`w-full py-3 rounded-lg font-bold transition-all flex items-center justify-center space-x-2 ${isSaved
                   ? 'bg-[#5BC3EB] text-[#36382E]'
                   : 'bg-[#EDE6E3] text-[#36382E] hover:bg-[#DADAD9]'
@@ -408,7 +389,7 @@ export default function JobDetailsPage() {
                 <div className="border-t border-[#EDE6E3]"></div>
                 <div className="flex items-center justify-between">
                   <span className="text-[#36382E]/70 flex items-center space-x-2">
-                    <DollarSign className="h-4 w-4" />
+                    <IndianRupee className="h-4 w-4" />
                     <span>Salary</span>
                   </span>
                   <span className="font-bold text-[#5BC3EB]">{formatSalary(jobDetails.salary, jobDetails.salaryType)}</span>
@@ -489,7 +470,6 @@ export default function JobDetailsPage() {
                   className="w-full px-4 py-3 rounded-lg bg-[#EDE6E3] text-[#36382E] outline-none border-2 border-[#DADAD9] focus:border-[#5BC3EB] transition-colors"
                 />
               </div>
-
               <div>
                 <label className="block text-[#36382E] font-medium mb-2">Upload Resume *</label>
                 <input

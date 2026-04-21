@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { BACKEND_API , showError , showSuccess } from "../backendApi";
+import { BACKEND_API, showError, showSuccess } from "../Helper/backendApi";
 import {
   Briefcase,
   Mail,
@@ -27,7 +27,7 @@ export default function SignUpPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [otpSend, setOtpSent] = useState(false);
   const [otp, setOtp] = useState("");
-  const [otpVerify , setOtpVerify] = useState(false)
+  const [otpVerify, setOtpVerify] = useState(false)
 
   const verifyOtp = async () => {
     const res = await fetch(`${BACKEND_API}/api/user/verify-otp`, {
@@ -54,15 +54,15 @@ export default function SignUpPage() {
     });
   };
 
-   const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!otpVerify) {
       return showError("plz verify your Email ID !")
     }
     try {
-      const res = await axios.post(`${BACKEND_API}/api/users/register`, {...formData , userType});
+      const res = await axios.post(`${BACKEND_API}/api/users/register`, { ...formData, userType });
       showSuccess(res.data.message);
-      setFormData({fullName: "",email: "",password: "",confirmPassword: "",company: "",})
+      setFormData({ fullName: "", email: "", password: "", confirmPassword: "", company: "", })
     } catch (error) {
       console.log(error)
       showError(error.response?.data?.message || "Error submitting form");
@@ -174,40 +174,38 @@ export default function SignUpPage() {
           </p>
         </div>
 
-      <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
 
-        {/* Sign Up Card */}
-        <div className="bg-white rounded-2xl shadow-2xl p-8 border-2 border-[#DADAD9]">
-          {/* User Type Selection */}
-          <div className="grid grid-cols-2 gap-4 mb-6">
-            <button
-              type="button"
-              onClick={() => setUserType("jobseeker")}
-              className={`p-4 rounded-lg border-2 transition-all ${
-                userType === "jobseeker"
-                  ? "border-[#5BC3EB] bg-[#5BC3EB]/10 text-[#36382E]"
-                  : "border-[#DADAD9] bg-[#EDE6E3] text-[#36382E]/60"
-              }`}
-            >
-              <User className="h-6 w-6 mx-auto mb-2" />
-              <div className="font-bold text-sm">Job Seeker</div>
-            </button>
-            <button
-              type="button"
-              onClick={() => setUserType("employer")}
-              className={`p-4 rounded-lg border-2 transition-all ${
-                userType === "employer"
-                  ? "border-[#F06449] bg-[#F06449]/10 text-[#36382E]"
-                  : "border-[#DADAD9] bg-[#EDE6E3] text-[#36382E]/60"
-              }`}
-            >
-              <Building2 className="h-6 w-6 mx-auto mb-2" />
-              <div className="font-bold text-sm">Employer</div>
-            </button>
-          </div>
+          {/* Sign Up Card */}
+          <div className="bg-white rounded-2xl shadow-2xl p-8 border-2 border-[#DADAD9]">
+            {/* User Type Selection */}
+            <div className="grid grid-cols-2 gap-4 mb-6">
+              <button
+                type="button"
+                onClick={() => setUserType("jobseeker")}
+                className={`p-4 rounded-lg border-2 transition-all ${userType === "jobseeker"
+                    ? "border-[#5BC3EB] bg-[#5BC3EB]/10 text-[#36382E]"
+                    : "border-[#DADAD9] bg-[#EDE6E3] text-[#36382E]/60"
+                  }`}
+              >
+                <User className="h-6 w-6 mx-auto mb-2" />
+                <div className="font-bold text-sm">Job Seeker</div>
+              </button>
+              <button
+                type="button"
+                onClick={() => setUserType("employer")}
+                className={`p-4 rounded-lg border-2 transition-all ${userType === "employer"
+                    ? "border-[#F06449] bg-[#F06449]/10 text-[#36382E]"
+                    : "border-[#DADAD9] bg-[#EDE6E3] text-[#36382E]/60"
+                  }`}
+              >
+                <Building2 className="h-6 w-6 mx-auto mb-2" />
+                <div className="font-bold text-sm">Employer</div>
+              </button>
+            </div>
 
-          {/* Google Sign In Button */}
-          {/* <button
+            {/* Google Sign In Button */}
+            {/* <button
             type="button"
             onClick={handleGoogleSignIn}
             className="w-full flex items-center justify-center space-x-3 px-6 py-3 rounded-lg border-2 border-[#DADAD9] bg-white hover:bg-[#EDE6E3] transition-all mb-6"
@@ -233,93 +231,92 @@ export default function SignUpPage() {
             <span className="text-[#36382E] font-medium">Sign up with Google</span>
           </button> */}
 
-          {/* Divider */}
-          <div className="relative mb-6">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-[#DADAD9]"></div>
+            {/* Divider */}
+            <div className="relative mb-6">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-[#DADAD9]"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-4 bg-white text-[#36382E]/60">
+                  Or sign up with email
+                </span>
+              </div>
             </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white text-[#36382E]/60">
-                Or sign up with email
-              </span>
-            </div>
-          </div>
 
-          {/* Form Fields */}
-          <div className="space-y-4">
-            <div>
+            {/* Form Fields */}
+            <div className="space-y-4">
+              <div>
+                <label className="block text-[#36382E] font-medium mb-2">
+                  Full Name *
+                </label>
+                <div className="relative">
+                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[#36382E]/50" />
+                  <input
+                    type="text"
+                    name="fullName"
+                    required
+                    value={formData.fullName}
+                    onChange={handleInputChange}
+                    placeholder="John Doe"
+                    className="w-full pl-12 pr-4 py-3 rounded-lg bg-[#EDE6E3] text-[#36382E] outline-none border-2 border-[#DADAD9] focus:border-[#5BC3EB] transition-colors"
+                  />
+                </div>
+              </div>
+
               <label className="block text-[#36382E] font-medium mb-2">
-                Full Name *
+                Email Address *
               </label>
-              <div className="relative">
-                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[#36382E]/50" />
-                <input
-                  type="text"
-                  name="fullName"
-                  required
-                  value={formData.fullName}
-                  onChange={handleInputChange}
-                  placeholder="John Doe"
-                  className="w-full pl-12 pr-4 py-3 rounded-lg bg-[#EDE6E3] text-[#36382E] outline-none border-2 border-[#DADAD9] focus:border-[#5BC3EB] transition-colors"
-                />
+              <div className="flex gap-1">
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[#36382E]/50" />
+                  <input
+                    type="email"
+                    name="email"
+                    required
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    placeholder="john@example.com"
+                    className="w-full pl-12 pr-4 py-3 rounded-lg bg-[#EDE6E3] text-[#36382E] outline-none border-2 border-[#DADAD9] focus:border-[#5BC3EB] transition-colors"
+                  />
+                </div>
+                <button
+                  onClick={sendOtp}
+                  disabled={isLoading}
+                  className={`flex items-center justify-center gap-2 cursor-pointer active:scale-95 px-3 py-3 rounded-lg font-bold text-white transition-all hover:shadow-lg transform hover:scale-105 disabled:opacity-70 disabled:cursor-not-allowed ${userType === "employer"
+                      ? "bg-[#F06449] hover:bg-[#F06449]/90"
+                      : "bg-[#5BC3EB] hover:bg-[#5BC3EB]/90"
+                    }`}
+                >
+                  {isLoading ? (
+                    <>
+                      <svg
+                        className="w-5 h-5 animate-spin text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8z"
+                        ></path>
+                      </svg>
+                      <span>Sending...</span>
+                    </>
+                  ) : (
+                    "Send OTP"
+                  )}
+                </button>
               </div>
-            </div>
-
-            <label className="block text-[#36382E] font-medium mb-2">
-              Email Address *
-            </label>
-            <div className="flex gap-1">
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[#36382E]/50" />
-                <input
-                  type="email"
-                  name="email"
-                  required
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  placeholder="john@example.com"
-                  className="w-full pl-12 pr-4 py-3 rounded-lg bg-[#EDE6E3] text-[#36382E] outline-none border-2 border-[#DADAD9] focus:border-[#5BC3EB] transition-colors"
-                />
-              </div>
-              <button
-                onClick={sendOtp}
-                disabled={isLoading}
-                className={`flex items-center justify-center gap-2 cursor-pointer active:scale-95 px-3 py-3 rounded-lg font-bold text-white transition-all hover:shadow-lg transform hover:scale-105 disabled:opacity-70 disabled:cursor-not-allowed ${
-                  userType === "employer"
-                    ? "bg-[#F06449] hover:bg-[#F06449]/90"
-                    : "bg-[#5BC3EB] hover:bg-[#5BC3EB]/90"
-                }`}
-              >
-                {isLoading ? (
-                  <>
-                    <svg
-                      className="w-5 h-5 animate-spin text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8z"
-                      ></path>
-                    </svg>
-                    <span>Sending...</span>
-                  </>
-                ) : (
-                  "Send OTP"
-                )}
-              </button>
-            </div>
-{/* 
+              {/* 
             <div>
               <label className="block text-[#36382E] font-medium mb-2">
                 Phone Number
@@ -337,133 +334,132 @@ export default function SignUpPage() {
               </div>
             </div> */}
 
-            {userType === "employer" && (
+              {userType === "employer" && (
+                <div>
+                  <label className="block text-[#36382E] font-medium mb-2">
+                    Company Name *
+                  </label>
+                  <div className="relative">
+                    <Building2 className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[#36382E]/50" />
+                    <input
+                      type="text"
+                      name="company"
+                      required
+                      value={formData.company}
+                      onChange={handleInputChange}
+                      placeholder="Your Company Inc."
+                      className="w-full pl-12 pr-4 py-3 rounded-lg bg-[#EDE6E3] text-[#36382E] outline-none border-2 border-[#DADAD9] focus:border-[#5BC3EB] transition-colors"
+                    />
+                  </div>
+                </div>
+              )}
+
               <div>
                 <label className="block text-[#36382E] font-medium mb-2">
-                  Company Name *
+                  Password *
                 </label>
                 <div className="relative">
-                  <Building2 className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[#36382E]/50" />
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[#36382E]/50" />
                   <input
-                    type="text"
-                    name="company"
+                    type={showPassword ? "text" : "password"}
+                    name="password"
                     required
-                    value={formData.company}
+                    minLength={6}
+                    value={formData.password}
                     onChange={handleInputChange}
-                    placeholder="Your Company Inc."
-                    className="w-full pl-12 pr-4 py-3 rounded-lg bg-[#EDE6E3] text-[#36382E] outline-none border-2 border-[#DADAD9] focus:border-[#5BC3EB] transition-colors"
+                    placeholder="••••••••"
+                    className="w-full pl-12 pr-12 py-3 rounded-lg bg-[#EDE6E3] text-[#36382E] outline-none border-2 border-[#DADAD9] focus:border-[#5BC3EB] transition-colors"
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#36382E]/50 hover:text-[#36382E]"
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-5 w-5" />
+                    ) : (
+                      <Eye className="h-5 w-5" />
+                    )}
+                  </button>
                 </div>
               </div>
-            )}
 
-            <div>
-              <label className="block text-[#36382E] font-medium mb-2">
-                Password *
-              </label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[#36382E]/50" />
-                <input
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  required
-                  minLength={6}
-                  value={formData.password}
-                  onChange={handleInputChange}
-                  placeholder="••••••••"
-                  className="w-full pl-12 pr-12 py-3 rounded-lg bg-[#EDE6E3] text-[#36382E] outline-none border-2 border-[#DADAD9] focus:border-[#5BC3EB] transition-colors"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#36382E]/50 hover:text-[#36382E]"
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-5 w-5" />
-                  ) : (
-                    <Eye className="h-5 w-5" />
-                  )}
-                </button>
+              <div>
+                <label className="block text-[#36382E] font-medium mb-2">
+                  Confirm Password *
+                </label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[#36382E]/50" />
+                  <input
+                    type={showConfirmPassword ? "text" : "password"}
+                    name="confirmPassword"
+                    required
+                    minLength={6}
+                    value={formData.confirmPassword}
+                    onChange={handleInputChange}
+                    placeholder="••••••••"
+                    className="w-full pl-12 pr-12 py-3 rounded-lg bg-[#EDE6E3] text-[#36382E] outline-none border-2 border-[#DADAD9] focus:border-[#5BC3EB] transition-colors"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#36382E]/50 hover:text-[#36382E]"
+                  >
+                    {showConfirmPassword ? (
+                      <EyeOff className="h-5 w-5" />
+                    ) : (
+                      <Eye className="h-5 w-5" />
+                    )}
+                  </button>
+                </div>
               </div>
-            </div>
-
-            <div>
-              <label className="block text-[#36382E] font-medium mb-2">
-                Confirm Password *
-              </label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[#36382E]/50" />
+              {/* Terms & Conditions */}
+              <div className="flex items-start space-x-2">
                 <input
-                  type={showConfirmPassword ? "text" : "password"}
-                  name="confirmPassword"
+                  type="checkbox"
+                  id="terms"
                   required
-                  minLength={6}
-                  value={formData.confirmPassword}
-                  onChange={handleInputChange}
-                  placeholder="••••••••"
-                  className="w-full pl-12 pr-12 py-3 rounded-lg bg-[#EDE6E3] text-[#36382E] outline-none border-2 border-[#DADAD9] focus:border-[#5BC3EB] transition-colors"
+                  className="mt-1 h-4 w-4 rounded border-[#DADAD9] text-[#5BC3EB] focus:ring-[#5BC3EB]"
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#36382E]/50 hover:text-[#36382E]"
-                >
-                  {showConfirmPassword ? (
-                    <EyeOff className="h-5 w-5" />
-                  ) : (
-                    <Eye className="h-5 w-5" />
-                  )}
-                </button>
+                <label htmlFor="terms" className="text-sm text-[#36382E]/70">
+                  I agree to the{" "}
+                  <a href="#" className="text-[#5BC3EB] hover:underline">
+                    Terms of Service
+                  </a>{" "}
+                  and{" "}
+                  <a href="#" className="text-[#5BC3EB] hover:underline">
+                    Privacy Policy
+                  </a>
+                </label>
               </div>
-            </div>
-            {/* Terms & Conditions */}
-            <div className="flex items-start space-x-2">
-              <input
-                type="checkbox"
-                id="terms"
-                required
-                className="mt-1 h-4 w-4 rounded border-[#DADAD9] text-[#5BC3EB] focus:ring-[#5BC3EB]"
-              />
-              <label htmlFor="terms" className="text-sm text-[#36382E]/70">
-                I agree to the{" "}
-                <a href="#" className="text-[#5BC3EB] hover:underline">
-                  Terms of Service
-                </a>{" "}
-                and{" "}
-                <a href="#" className="text-[#5BC3EB] hover:underline">
-                  Privacy Policy
-                </a>
-              </label>
-            </div>
 
-            {/* Sign Up Button */}
-            <button
-              type="submit"
-              // onClick={handleSubmit}
-              className={`w-full py-3 rounded-lg font-bold text-white transition-all hover:shadow-lg transform hover:scale-105 ${
-                userType === "employer"
-                  ? "bg-[#F06449] hover:bg-[#F06449]/90"
-                  : "bg-[#5BC3EB] hover:bg-[#5BC3EB]/90"
-              }`}
-            >
-              Create Account
-            </button>
-          </div>
-
-          {/* Sign In Link */}
-          <div className="mt-6 text-center">
-            <p className="text-[#36382E]/70">
-              Already have an account?{" "}
-              <Link
-                to={"/login"}
-                className="text-[#5BC3EB] hover:underline font-medium"
+              {/* Sign Up Button */}
+              <button
+                type="submit"
+                // onClick={handleSubmit}
+                className={`w-full py-3 rounded-lg font-bold text-white transition-all hover:shadow-lg transform hover:scale-105 ${userType === "employer"
+                    ? "bg-[#F06449] hover:bg-[#F06449]/90"
+                    : "bg-[#5BC3EB] hover:bg-[#5BC3EB]/90"
+                  }`}
               >
-                Sign In
-              </Link>
-            </p>
+                Create Account
+              </button>
+            </div>
+
+            {/* Sign In Link */}
+            <div className="mt-6 text-center">
+              <p className="text-[#36382E]/70">
+                Already have an account?{" "}
+                <Link
+                  to={"/login"}
+                  className="text-[#5BC3EB] hover:underline font-medium"
+                >
+                  Sign In
+                </Link>
+              </p>
+            </div>
           </div>
-        </div>
-</form>
+        </form>
 
       </div>
     </div>
