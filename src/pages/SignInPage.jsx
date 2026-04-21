@@ -1,15 +1,15 @@
-import React , { useState } from 'react';
+import React, { useState } from 'react';
 import { Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
 import { useDispatch } from 'react-redux';
-import {Link} from "react-router-dom" ; 
+import { Link } from "react-router-dom";
 import axios from 'axios';
-import { BACKEND_API , showError , showSuccess } from '../backendApi';
+import { BACKEND_API, showError, showSuccess } from '../Helper/backendApi';
 import { setCredentials } from '../store/Slice/UserSlice';
 import { useNavigate } from 'react-router-dom';
 export default function SignInPage() {
-  let navigate =  useNavigate()
+  let navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false);
-  const dispatch =  useDispatch()
+  const dispatch = useDispatch()
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -24,16 +24,16 @@ export default function SignInPage() {
     });
   };
 
-  const handleSubmit = async() => {
-     try {
-      const res = await axios.post(`${BACKEND_API}/api/users/login`, formData,{
-        withCredentials : true 
+  const handleSubmit = async () => {
+    try {
+      const res = await axios.post(`${BACKEND_API}/api/users/login`, formData, {
+        withCredentials: true
       });
       showSuccess(res.data.message);
       dispatch(setCredentials(res.data.user))
-      localStorage.setItem("userID" , res.data?.user?.id)
+      localStorage.setItem("userID", res.data?.user?.id)
       navigate("/")
-      setFormData({email: "",password: "",})
+      setFormData({ email: "", password: "", })
     } catch (error) {
       console.log(error)
       showError(error.response?.data?.message || "Error submitting form");
@@ -170,7 +170,7 @@ export default function SignInPage() {
               </Link>
             </p>
           </div>
-        </div>       
+        </div>
       </div>
     </div>
   );

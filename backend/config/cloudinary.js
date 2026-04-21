@@ -1,6 +1,7 @@
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const multer = require('multer');
+const path = require('path');
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -15,11 +16,13 @@ const storage = new CloudinaryStorage({
   params: {
     folder: 'jobPortal/resumes',
     resource_type: 'raw',              // raw = non-image files (PDF, DOCX)
-    allowed_formats: ['pdf', 'doc', 'docx'],
+    // Don't use allowed_formats for raw uploads — Cloudinary rejects doc/docx.
+    // Format validation is handled by multer's fileFilter below.
     public_id: (req, file) => {
       const timestamp = Date.now();
-      const nameWithoutExt = file.originalname.replace(/\.[^/.]+$/, '');
-      return `${nameWithoutExt}_${timestamp}`;
+      const ext = path.extname(file.originalname);          // e.g. '.pdf', '.docx'
+      const nameWithoutExt = path.basename(file.originalname, ext);
+      return `${nameWithoutExt}_${timestamp}${ext}`;        // keep extension so URL works
     },
   },
 });

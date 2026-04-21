@@ -2,20 +2,22 @@ import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Search, MapPin, DollarSign, Briefcase, Building2, Clock, Bookmark, Filter, X, Users } from 'lucide-react'
 import { Link } from 'react-router-dom'
-
+import { useDispatch } from 'react-redux'
+import { toggleSaveJob } from '../store/Slice/ApplicationSlice'
 function BrowseJobsPage() {
+  const dispatch =  useDispatch()
   const { jobs, isLoading, isError } = useSelector((state) => state.job)
   const [searchQuery, setSearchQuery] = useState('')
   const [locationQuery, setLocationQuery] = useState('')
   const [savedJobs, setSavedJobs] = useState([])
-
   const [selectedType, setSelectedType] = useState('')
   // const [selectedSalary, setSelectedSalary] = useState('')
 
   const jobTypes = ['Full-time', 'Part-time', 'Contract', 'Remote', 'Internship']
 
-  const toggleSaveJob = (jobId) => {
-    setSavedJobs((prev) =>
+  const toggleSaveJob1 = (jobId) => {
+       dispatch(toggleSaveJob(jobId))
+      setSavedJobs((prev) =>
       prev.includes(jobId) ? prev.filter((id) => id !== jobId) : [...prev, jobId]
     )
   }
@@ -194,10 +196,7 @@ function BrowseJobsPage() {
                     </div>
                   </div>
                   <button
-                    onClick={(e) => {
-                      e.preventDefault()
-                      toggleSaveJob(job._id || index)
-                    }}
+                    onClick={() => toggleSaveJob1(job._id)}
                     className={`p-2 rounded-lg transition-all ${savedJobs.includes(job._id || index)
                       ? 'bg-[#F06449] text-white'
                       : 'bg-white/10 text-white/60 hover:bg-white/20 hover:text-white'

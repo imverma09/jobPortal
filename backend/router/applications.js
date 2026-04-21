@@ -1,30 +1,28 @@
 const express = require('express');
 const router = express.Router();
-const jwt = require('jsonwebtoken');
 const Application = require('../model/application');
+const Job = require('../model/job');
 const { upload, cloudinary } = require('../config/cloudinary');
 const dotenv = require('dotenv');
 dotenv.config();
-
-// ---- Auth middleware (reusable) ----
-const authenticate = (req, res, next) => {
-  const token = req.cookies.token;
-  if (!token) return res.status(401).json({ message: 'Please login first' });
-
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.userId = decoded.id;
-    next();
-  } catch (err) {
-    return res.status(401).json({ message: 'Invalid or expired token' });
-  }
-};
+const { authenticate } = require('../middleware/authMiddleware');
 
 // ---- POST /apply  –  Submit an application with resume ----
 router.post(
   '/apply',
   authenticate,
-  upload.single('resume'),          // field name from the frontend FormData
+  (req, res, next) => {
+    upload.single('resume')(req, res, (err) => {
+      if (err) {
+        console.error('Multer upload error:', err);
+        if (err.code === 'LIMIT_FILE_SIZE') {
+          return res.status(400).json({ message: 'File too large. Maximum size is 5MB.' });
+        }
+        return res.status(400).json({ message: err.message || 'File upload failed' });
+      }
+      next();
+    });
+  },
   async (req, res) => {
     try {
       const { jobId, fullName, email, phone, coverLetter } = req.body;
@@ -46,7 +44,6 @@ router.post(
         }
         return res.status(409).json({ message: 'You have already applied for this job' });
       }
-
       const application = new Application({
         job: jobId,
         applicant: req.userId,
@@ -59,16 +56,14 @@ router.post(
       });
 
       await application.save();
-
+      await Job.findByIdAndUpdate(jobId, { $inc: { applied: 1 } });
       return res.status(201).json({ message: 'Application submitted successfully!', application });
     } catch (err) {
       console.error('Application submit error:', err);
-
       // Duplicate key error (compound index)
       if (err.code === 11000) {
         return res.status(409).json({ message: 'You have already applied for this job' });
       }
-
       return res.status(500).json({ message: 'Server error' });
     }
   }
@@ -80,7 +75,6 @@ router.get('/my-applications', authenticate, async (req, res) => {
     const applications = await Application.find({ applicant: req.userId })
       .populate('job', 'jobTitle companyName location jobType salary salaryType')
       .sort({ createdAt: -1 });
-
     return res.status(200).json(applications);
   } catch (err) {
     console.error('Fetch applications error:', err);

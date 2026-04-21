@@ -1,10 +1,38 @@
 import React, { useState } from 'react';
 import { Briefcase, User, Bell, LogOut, Menu, X, Home, FileText, Users, Settings, Edit, Trash2, Eye, Clock, Plus, TrendingUp, MapPin, DollarSign, Building2, Search, Filter, CheckCircle, XCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { updateProfile } from '../store/Slice/UserSlice';
 export default function EmployerDashboard() {
-
   const [activeTab, setActiveTab] = useState('overview');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { userInfo} =  useSelector((state) => state.auth)
+  const dispatch = useDispatch();
+  console.log(userInfo);
+  const [employData , setEmployData] =  useState({
+    fullName : userInfo.fullName || "",
+    email : userInfo.email || "",
+    phone : userInfo.phone || "",
+    company : userInfo.company || "",
+    website : userInfo.website || "",
+    about : userInfo.about || "" , 
+    userId : userInfo.id || "", 
+    userType : userInfo.userType || ""
+  })
+
+  function handleInputChange(e) {
+    const { id, value } = e.target;
+    setEmployData(prevData => ({
+      ...prevData,
+      [id]: value
+    }));
+  }
+
+  function handelSubmit() {
+     dispatch(updateProfile(employData))
+  }
+
   const jobPostings = [
     { id: 1, title: 'Senior Developer', applications: 45, views: 320, status: 'active', posted: '2025-10-15', location: 'New York, NY', salary: '$120k - $150k' },
     { id: 2, title: 'UI/UX Designer', applications: 32, views: 250, status: 'active', posted: '2025-10-18', location: 'San Francisco, CA', salary: '$90k - $110k' },
@@ -364,7 +392,10 @@ export default function EmployerDashboard() {
                       <label className="block text-[#36382E] font-medium mb-2">Company Name</label>
                       <input
                         type="text"
-                        defaultValue="Tech Corp"
+                        placeholder="Tech Corp"
+                        value={employData.company}
+                        onChange={handleInputChange}
+                        id="company"    
                         className="w-full px-4 py-3 rounded-lg bg-[#EDE6E3] text-[#36382E] outline-none border-2 border-[#DADAD9] focus:border-[#5BC3EB] transition-colors"
                       />
                     </div>
@@ -372,7 +403,10 @@ export default function EmployerDashboard() {
                       <label className="block text-[#36382E] font-medium mb-2">Email</label>
                       <input
                         type="email"
-                        defaultValue="hr@techcorp.com"
+                        placeholder="hr@techcorp.com"
+                        value={employData.email}
+                        onChange={handleInputChange}
+                        id="email"
                         className="w-full px-4 py-3 rounded-lg bg-[#EDE6E3] text-[#36382E] outline-none border-2 border-[#DADAD9] focus:border-[#5BC3EB] transition-colors"
                       />
                     </div>
@@ -380,7 +414,10 @@ export default function EmployerDashboard() {
                       <label className="block text-[#36382E] font-medium mb-2">Phone</label>
                       <input
                         type="tel"
-                        defaultValue="+1 (555) 999-0000"
+                        placeholder="+1 (555) 999-0000"
+                        value={employData.phone}
+                        onChange={handleInputChange}
+                        id="phone"
                         className="w-full px-4 py-3 rounded-lg bg-[#EDE6E3] text-[#36382E] outline-none border-2 border-[#DADAD9] focus:border-[#5BC3EB] transition-colors"
                       />
                     </div>
@@ -388,7 +425,10 @@ export default function EmployerDashboard() {
                       <label className="block text-[#36382E] font-medium mb-2">Website</label>
                       <input
                         type="url"
-                        defaultValue="https://www.techcorp.com"
+                        placeholder="https://www.techcorp.com"
+                        value={employData.website}
+                        onChange={handleInputChange}
+                        id="website"
                         className="w-full px-4 py-3 rounded-lg bg-[#EDE6E3] text-[#36382E] outline-none border-2 border-[#DADAD9] focus:border-[#5BC3EB] transition-colors"
                       />
                     </div>
@@ -396,71 +436,15 @@ export default function EmployerDashboard() {
                       <label className="block text-[#36382E] font-medium mb-2">About Company</label>
                       <textarea
                         rows="4"
-                        defaultValue="Leading technology company specializing in innovative solutions..."
+                        placeholder="Leading technology company specializing in innovative solutions..."
+                        value={employData.about}
+                        onChange={handleInputChange}
+                        id="about"
                         className="w-full px-4 py-3 rounded-lg bg-[#EDE6E3] text-[#36382E] outline-none border-2 border-[#DADAD9] focus:border-[#5BC3EB] transition-colors resize-none"
                       ></textarea>
                     </div>
-                    <button className="bg-[#F06449] text-white px-6 py-3 rounded-lg font-bold hover:shadow-lg transition-all">
+                    <button onClick={handelSubmit} className="bg-[#F06449] text-white px-6 py-3 rounded-lg font-bold hover:shadow-lg transition-all">
                       Save Changes
-                    </button>
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-2xl shadow-xl p-6 border-2 border-[#DADAD9]">
-                  <h2 className="text-xl font-bold text-[#36382E] mb-4">Notification Preferences</h2>
-                  <div className="space-y-4">
-                    <label className="flex items-center justify-between">
-                      <span className="text-[#36382E]">New application notifications</span>
-                      <input type="checkbox" defaultChecked className="h-5 w-5 rounded text-[#F06449]" />
-                    </label>
-                    <label className="flex items-center justify-between">
-                      <span className="text-[#36382E]">Weekly analytics report</span>
-                      <input type="checkbox" defaultChecked className="h-5 w-5 rounded text-[#F06449]" />
-                    </label>
-                    <label className="flex items-center justify-between">
-                      <span className="text-[#36382E]">Applicant status updates</span>
-                      <input type="checkbox" defaultChecked className="h-5 w-5 rounded text-[#F06449]" />
-                    </label>
-                    <label className="flex items-center justify-between">
-                      <span className="text-[#36382E]">Job posting expiration alerts</span>
-                      <input type="checkbox" defaultChecked className="h-5 w-5 rounded text-[#F06449]" />
-                    </label>
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-2xl shadow-xl p-6 border-2 border-[#DADAD9]">
-                  <h2 className="text-xl font-bold text-[#36382E] mb-4">Subscription Plan</h2>
-                  <div className="bg-[#5BC3EB]/10 rounded-lg p-6 border-2 border-[#5BC3EB]/30">
-                    <div className="flex items-center justify-between mb-4">
-                      <div>
-                        <h3 className="text-2xl font-bold text-[#36382E]">Premium Plan</h3>
-                        <p className="text-[#36382E]/70">Unlimited job postings</p>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-3xl font-bold text-[#5BC3EB]">$99</div>
-                        <div className="text-sm text-[#36382E]/70">/month</div>
-                      </div>
-                    </div>
-                    <div className="space-y-2 mb-4">
-                      <div className="flex items-center space-x-2 text-[#36382E]">
-                        <CheckCircle className="h-5 w-5 text-[#5BC3EB]" />
-                        <span>Unlimited active job postings</span>
-                      </div>
-                      <div className="flex items-center space-x-2 text-[#36382E]">
-                        <CheckCircle className="h-5 w-5 text-[#5BC3EB]" />
-                        <span>Featured job listings</span>
-                      </div>
-                      <div className="flex items-center space-x-2 text-[#36382E]">
-                        <CheckCircle className="h-5 w-5 text-[#5BC3EB]" />
-                        <span>Advanced analytics dashboard</span>
-                      </div>
-                      <div className="flex items-center space-x-2 text-[#36382E]">
-                        <CheckCircle className="h-5 w-5 text-[#5BC3EB]" />
-                        <span>Priority customer support</span>
-                      </div>
-                    </div>
-                    <button className="w-full bg-[#F06449] text-white py-3 rounded-lg font-bold hover:shadow-lg transition-all">
-                      Upgrade Plan
                     </button>
                   </div>
                 </div>

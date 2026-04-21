@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { logoutUser } from '../store/Slice/UserSlice';
 function Navbar() { 
- const {userInfo} =   useSelector((state)=> state.auth)
+ const {userInfo , isAuthenticated} =   useSelector((state)=> state.auth)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const dispatch =   useDispatch()
   return (
@@ -37,7 +37,7 @@ function Navbar() {
                 <span>Companies</span>
               </Link>
               {
-                userInfo.email ? (
+                isAuthenticated ? (
                   <button onClick={()=>{
                     dispatch(logoutUser())
                   }} className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 transition-colors font-medium">
