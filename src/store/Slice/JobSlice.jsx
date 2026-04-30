@@ -5,9 +5,11 @@ import { BACKEND_API, showError , showSuccess } from "../../Helper/backendApi";
 export const fetchJob = createAsyncThunk("fetchJob", async (__, { rejectWithValue }) => {
     try {
         const res = await axios.get(`${BACKEND_API}/api/data/getjob`)
+        console.log(res.data)
         return res.data
     } catch (error) {
-        return rejectWithValue(error.message)
+        console.log(error)
+        return rejectWithValue(error.response.data.message || " Server Error ! try again later ")
     }
 })
 export  const fetchJobPosting =  createAsyncThunk("fetchJobPosting" ,  async( __ , {rejectWithValue})=>{
