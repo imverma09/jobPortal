@@ -1,13 +1,20 @@
-import React , { useState } from 'react';
+import React, { useState } from 'react';
 import { Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
 import { useDispatch } from 'react-redux';
-import {Link} from "react-router-dom" ; 
+import { Link } from "react-router-dom";
 import axios from 'axios';
-import { BACKEND_API , showError , showSuccess } from '../backendApi';
+import { BACKEND_API, showError, showSuccess } from '../Helper/backendApi';
 import { setCredentials } from '../store/Slice/UserSlice';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 export default function SignInPage() {
+  let navigate = useNavigate()
+  const {isAuthenticated } =  useSelector((state) => state.auth)
+  if(isAuthenticated){
+    navigate("/")
+  }
   const [showPassword, setShowPassword] = useState(false);
-  const dispatch =  useDispatch()
+  const dispatch = useDispatch()
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -22,16 +29,16 @@ export default function SignInPage() {
     });
   };
 
-  const handleSubmit = async() => {
-     try {
-      const res = await axios.post(`${BACKEND_API}/api/users/login`, formData,{
-        withCredentials : true 
+  const handleSubmit = async () => {
+    try {
+      const res = await axios.post(`${BACKEND_API}/api/users/login`, formData, {
+        withCredentials: true
       });
-
       showSuccess(res.data.message);
       dispatch(setCredentials(res.data.user))
-      localStorage.setItem("userID" , res.data?.user?.id)
-      setFormData({email: "",password: "",})
+      localStorage.setItem("userID", res.data?.user?.id)
+      navigate("/")
+      setFormData({ email: "", password: "", })
     } catch (error) {
       console.log(error)
       showError(error.response?.data?.message || "Error submitting form");
@@ -39,10 +46,8 @@ export default function SignInPage() {
   };
 
   const handleGoogleSignIn = () => {
-    console.log('Google Sign In clicked');
-    alert('Google Sign In would be implemented here!');
+    showError('Google Sign In is not implemented yet. coming soon!');
   };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#EDE6E3] via-[#DADAD9] to-[#EDE6E3] flex items-center justify-center p-4">
       <div className="w-full max-w-md">
@@ -170,7 +175,7 @@ export default function SignInPage() {
               </Link>
             </p>
           </div>
-        </div>       
+        </div>
       </div>
     </div>
   );

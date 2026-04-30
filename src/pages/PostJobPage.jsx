@@ -1,6 +1,6 @@
-import React , { useState } from 'react';
+import React, { useState } from 'react';
 import { Briefcase, ChevronRight, ChevronLeft, Check, Building2, MapPin, DollarSign, Clock, Users, FileText, Tag, Mail, Phone, Globe } from 'lucide-react';
-import { BACKEND_API  , showError , showSuccess} from '../backendApi';
+import { BACKEND_API, showError, showSuccess } from '../Helper/backendApi';
 import axios from 'axios';
 export default function PostJobPage() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -44,17 +44,17 @@ export default function PostJobPage() {
   };
 
   const handleSubmit = async () => {
-    let createdBy =  localStorage.getItem("userID")
-    if(!createdBy){
-      return showError("plz login your Account !") 
+    let createdBy = localStorage.getItem("userID")
+    if (!createdBy) {
+      return showError("plz login your Account !")
     }
     try {
-          const res = await axios.post(`${BACKEND_API}/api/data/postJob`, {...formData , createdBy});
-          showSuccess(res.data.message);
-        } catch (error) {
-          console.log(error)
-          showError(error.response?.data?.message || "Error submitting form");
-        }
+      const res = await axios.post(`${BACKEND_API}/api/data/postJob`, { ...formData, createdBy });
+      showSuccess(res.data.message);
+    } catch (error) {
+      console.log(error)
+      showError(error.response?.data?.message || "Error submitting form");
+    }
     console.log('Job Posted:', formData);
     // alert('Job posted successfully! 🎉');
   };
@@ -80,25 +80,22 @@ export default function PostJobPage() {
           {[1, 2, 3].map((step) => (
             <div key={step} className="flex items-center flex-1">
               <div className="flex flex-col items-center flex-1">
-                <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg transition-all ${
-                  currentStep >= step 
-                    ? 'bg-[#5BC3EB] text-[#36382E] shadow-lg' 
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg transition-all ${currentStep >= step
+                    ? 'bg-[#5BC3EB] text-[#36382E] shadow-lg'
                     : 'bg-white text-[#36382E]/50 border-2 border-[#DADAD9]'
-                }`}>
+                  }`}>
                   {currentStep > step ? <Check className="h-6 w-6" /> : step}
                 </div>
-                <span className={`mt-2 text-sm font-medium ${
-                  currentStep >= step ? 'text-[#36382E]' : 'text-[#36382E]/50'
-                }`}>
+                <span className={`mt-2 text-sm font-medium ${currentStep >= step ? 'text-[#36382E]' : 'text-[#36382E]/50'
+                  }`}>
                   {step === 1 && 'Job Details'}
                   {step === 2 && 'Description'}
                   {step === 3 && 'Company Info'}
                 </span>
               </div>
               {step < 3 && (
-                <div className={`h-1 flex-1 mx-2 rounded ${
-                  currentStep > step ? 'bg-[#5BC3EB]' : 'bg-[#DADAD9]'
-                }`}></div>
+                <div className={`h-1 flex-1 mx-2 rounded ${currentStep > step ? 'bg-[#5BC3EB]' : 'bg-[#DADAD9]'
+                  }`}></div>
               )}
             </div>
           ))}
@@ -388,11 +385,10 @@ export default function PostJobPage() {
               type="button"
               onClick={prevStep}
               disabled={currentStep === 1}
-              className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-medium transition-all ${
-                currentStep === 1
+              className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-medium transition-all ${currentStep === 1
                   ? 'bg-[#DADAD9] text-[#36382E]/50 cursor-not-allowed'
                   : 'bg-[#36382E] text-[#EDE6E3] hover:bg-[#36382E]/90'
-              }`}
+                }`}
             >
               <ChevronLeft className="h-5 w-5" />
               <span>Previous</span>

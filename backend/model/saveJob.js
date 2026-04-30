@@ -1,0 +1,14 @@
+const mongoose = require("mongoose");
+
+const saveJobSchema = new mongoose.Schema({
+    jobId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Job"
+    },
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    }
+})
+
+module.exports = mongoose.model("SaveJob", saveJobSchema)

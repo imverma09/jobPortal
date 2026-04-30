@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Mail, ArrowLeft, Send, CheckCircle, Lock } from "lucide-react";
 import { Link } from "react-router-dom";
-import { BACKEND_API, showError, showSuccess } from "../backendApi";
+import { BACKEND_API, showError, showSuccess } from "../Helper/backendApi";
 export default function ForgotPasswordPage() {
   const [step, setStep] = useState(1); // 1: Email, 2: Success, 3: Reset Password
   const [email, setEmail] = useState("");
@@ -67,7 +67,7 @@ export default function ForgotPasswordPage() {
       }
     } catch (error) {
       console.log(error);
-    }finally{
+    } finally {
       setIsLoading(false)
     }
   };

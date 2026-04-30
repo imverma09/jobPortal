@@ -20,6 +20,14 @@ const JobSchema = new mongoose.Schema({
   contactPhone: { type: String, trim: true },
   applicationDeadline: { type: Date },
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, 
+  views: {
+    type: Number,
+    default: 0
+  },
+  applied: {
+    type: Number,
+    default: 0
+  },
 }, {
   timestamps: true
 });
