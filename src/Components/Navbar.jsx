@@ -17,9 +17,11 @@ function Navbar() {
               <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-2 rounded-lg">
                 <Briefcase className="h-6 w-6 text-white" />
               </div>
-              <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                JobPortal
-              </span>
+              <Link to={"/"}>
+                <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                  JobPortal
+                </span>
+              </Link>
             </div>
 
             {/* Desktop Menu */}
@@ -28,14 +30,15 @@ function Navbar() {
                 <Home className="h-4 w-4" />
                 <span>Home</span>
               </Link>
+              <Link to={"/about"} className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 transition-colors font-medium">
+                <FileText  className="h-4 w-4" />
+                <span>About</span>
+              </Link>
               <Link to={"jobs"} className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 transition-colors font-medium">
                 <Search className="h-4 w-4" />
                 <span>Find Jobs</span>
               </Link>
-              <Link to={"#"} className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 transition-colors font-medium">
-                <Building2 className="h-4 w-4" />
-                <span>Companies</span>
-              </Link>
+  
               {
                 isAuthenticated ? (
                   <button onClick={()=>{
@@ -57,26 +60,21 @@ function Navbar() {
             </div>
             {/* Right Side Icons */}
             <div className="hidden md:flex items-center space-x-4">
-              <button className="relative p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors">
-                <Bell className="h-5 w-5" />
-                <span className="absolute top-1 right-1 h-2 w-2 bg-red-500 rounded-full"></span>
-              </button>
+             
               
               <div className="relative">
                 <Link to={ userInfo.userType == "jobseeker" ?"user_dashboard" : "employer_dashboard"} className='cursor-pointer'>
                 <button 
-                  className="flex items-center space-x-2 p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="flex cursor-pointer  items-center space-x-2 p-2 hover:bg-gray-100 rounded-lg transition-colors"
                   >
                   <div className="h-8 w-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center">
                     <User className="h-5 w-5 text-white" />
                   </div>
                 </button>
                   </Link>
-
-              
               </div>
                 <Link  to={"post-job"}>
-              <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-lg font-medium hover:shadow-lg transform hover:scale-105 transition-all">
+              <button className="cursor-pointer bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-lg font-medium hover:shadow-lg transform hover:scale-105 transition-all">
                 Post a Job
               </button>
                 </Link>

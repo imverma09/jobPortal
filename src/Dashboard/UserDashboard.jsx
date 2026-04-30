@@ -7,6 +7,8 @@ import MyApplications from '../Components/MyApplications';
 import { getStatusColor, getStatusIcon } from '../Helper/myApplication';
 import { updateProfile } from '../store/Slice/UserSlice'
 import SavedJobs from '../Components/SaveJobs';
+import { showError } from '../Helper/backendApi';
+
 export default function UserDashboard() {
   const [activeTab, setActiveTab] = useState('overview');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -24,6 +26,14 @@ export default function UserDashboard() {
   }
 
   const handleUpdateProfile = () => {
+    if (!profile.fullName.trim()) {
+      showError("Full name is required.");
+      return;
+    }
+    if (profile.phone.length !== 10) {
+      showError("Invalid phone number. Please enter a 10-digit phone number.");
+      return;
+    }
     dispatch(updateProfile(profile))
   }
 
@@ -216,7 +226,7 @@ export default function UserDashboard() {
                       <label className="block text-[#36382E] font-medium mb-2">Phone</label>
                       <input
                         type="tel"
-                        defaultValue="+91 96123-4567"
+                        // defaultValue="+91 96123-457"
                         value={profile?.phone}
                         id="phone"
                         onChange={handelChange}

@@ -11,7 +11,7 @@ const ApplicationSchema = new mongoose.Schema({
   resumePublicId: { type: String },                      // Cloudinary public_id for deletion
   status: {
     type: String,
-    enum: ['pending', 'reviewed', 'shortlisted', 'rejected'],
+    enum: ['pending', 'interview', 'shortlisted', 'rejected'],
     default: 'pending',
   },
 }, {

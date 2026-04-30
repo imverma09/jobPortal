@@ -36,6 +36,17 @@ export const toggleSaveJob = createAsyncThunk("toggleSaveJob", async (jobId) => 
         console.log(error)
         return ({ msg: "server Error" })
     }
+}) 
+export  const deleteApplication =  createAsyncThunk("deleteApplication" ,async ( applicationId , {rejectWithValue})=>{
+    try{ 
+         let response =  await axios.delete(`${BACKEND_API}/api/applications/${applicationId}` , {
+            withCredentials : true, 
+         })
+         console.log(response.data)
+         return  response.data
+    }catch(error){
+         return rejectWithValue(error.response.data.message || "Server Error !")
+    }
 })
 
 
@@ -88,6 +99,18 @@ const applicationSlice = createSlice({
         })
         builder.addCase(toggleSaveJob.rejected , (state , action)=>{
             console.log(action.payload)
+            showError(action.payload.message)
+        })
+        builder.addCase(deleteApplication.pending , (state , action)=>{
+            state.isLoading = true 
+        })
+        builder.addCase(deleteApplication.fulfilled , (state , action)=>{
+            state.isLoading = false 
+            state.application = state.application.filter(app => app._id !== action.meta.arg)
+            showSuccess(action.payload.message)
+        })
+        builder.addCase(deleteApplication.rejected , (state , action)=>{
+            state.isLoading = false
             showError(action.payload.message)
         })
     }
