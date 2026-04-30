@@ -11,7 +11,7 @@ import { getStatusColor } from "../Helper/myApplication";
 function JobPosting() {
   let dispatch = useDispatch();
   const { jobPostings } = useSelector((state) => state.job);
-  console.log(jobPostings);
+  
   useEffect(() => {
     dispatch(fetchJobPosting());
   }, []);

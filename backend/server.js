@@ -13,7 +13,7 @@ const jobViewRouter =  require("./router/jobView")
 const cookiesParser = require('cookie-parser');
 dotenv.config()
 app.use(cors({
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173" , "https://job-portal-mauve-rho.vercel.app"],
     credentials: true
 }))
 app.use(express.json())

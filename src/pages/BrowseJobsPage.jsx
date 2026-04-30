@@ -12,7 +12,7 @@ function BrowseJobsPage() {
   const [savedJobs, setSavedJobs] = useState([])
   const [selectedType, setSelectedType] = useState('')
   // const [selectedSalary, setSelectedSalary] = useState('')
-
+   console.log(jobs);
   const jobTypes = ['Full-time', 'Part-time', 'Contract', 'Remote', 'Internship']
 
   const toggleSaveJob1 = (jobId) => {
