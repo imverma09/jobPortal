@@ -14,7 +14,6 @@ export default function JobDetailsPage() {
   let { userInfo } = useSelector((state) => state.auth)
   const { jobs } = useSelector((state) => state.job);
   const jobDetails = jobs.find((job) => job._id === jobId);
-  console.log(jobDetails)
   const [isSaved, setIsSaved] = useState(false);
   const [showApplicationModal, setShowApplicationModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);

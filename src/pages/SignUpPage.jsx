@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { BACKEND_API, showError, showSuccess } from "../Helper/backendApi";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+// import useSelector from "react-redux/es/hooks/useSelector";
 import {
   Briefcase,
   Mail,
@@ -14,6 +17,11 @@ import {
 import { Link } from "react-router-dom";
 
 export default function SignUpPage() {
+ const navigate =   useNavigate()
+  const { isAuthenticated } = useSelector((state) => state.auth);
+  if (isAuthenticated) {  
+    navigate("/")
+  }
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [userType, setUserType] = useState("jobseeker");

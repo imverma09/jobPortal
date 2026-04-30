@@ -96,4 +96,45 @@ router.get('/job/:jobId', authenticate, async (req, res) => {
   }
 });
 
+
+router.get("/get-applicants" , authenticate , async (req , res  )=>{
+     try{ 
+        const applicants = await Application.find({applicant : req.userId}).populate("job" , "jobTitle companyName location jobType salary salaryType").sort({createdAt : -1});
+        res.status(200).json(applicants)
+     }catch( error){
+    
+       console.error('Fetch job applications error:', error);
+    return res.status(500).json({ message: 'Server error' });
+  }
+})
+
+router.delete("/:applicationId" , authenticate , async( req , res )=>{
+  const applicationId =      req.params.applicationId
+  try{
+    await  Application.findOneAndDelete({_id : applicationId})
+    res.status(200).json({message : " Data delete ! "})
+    // console.log(applicationId
+  }catch(error){
+    console.log(error)
+    return res.status(500).json({ message: 'Server error' });
+    
+  }
+})
+
+
+router.patch("/updateStatus" , authenticate , async ( req , res )=>{
+    const { applicantId , status } = req.body
+      try{
+        let data =   await Application.findByIdAndUpdate(applicantId ,{status})
+        if(!data){
+            return res.status(404).json({ message: "Application not found" })
+        }
+        res.status(200).json({ message : " status update successful ! "})
+
+      }catch(error){
+        console.log(error)
+        res.status(500).json({message : "server Error !"})
+      }
+})
+
 module.exports = router;

@@ -15,12 +15,12 @@ import { fetchUserInfo } from './store/Slice/UserSlice';
 import { fetchJob } from './store/Slice/JobSlice';
 import { useEffect } from 'react';
 import ProtectedRoute from './pages/ProtectedRoute';
+import About from './pages/About';
 function App() {
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(fetchUserInfo())
     dispatch(fetchJob())
-
   }, [])
 
   return (
@@ -28,6 +28,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Layout></Layout>}>
           <Route index element={<Home />} />
+          <Route path='about' element={<About />} />
           <Route path="post-job" element={<ProtectedRoute><PostJobPage /></ProtectedRoute>} />
           <Route path='login' element={<SignInPage />} />
           <Route path='sign' element={<SignUpPage></SignUpPage>} />

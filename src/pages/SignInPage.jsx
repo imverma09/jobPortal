@@ -6,8 +6,13 @@ import axios from 'axios';
 import { BACKEND_API, showError, showSuccess } from '../Helper/backendApi';
 import { setCredentials } from '../store/Slice/UserSlice';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 export default function SignInPage() {
   let navigate = useNavigate()
+  const {isAuthenticated } =  useSelector((state) => state.auth)
+  if(isAuthenticated){
+    navigate("/")
+  }
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch()
   const [formData, setFormData] = useState({

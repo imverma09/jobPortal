@@ -1,15 +1,27 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Briefcase, User, Bell, LogOut, Menu, X, Home, FileText, Users, Settings, Edit, Trash2, Eye, Clock, Plus, TrendingUp, MapPin, DollarSign, Building2, Search, Filter, CheckCircle, XCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { updateProfile } from '../store/Slice/UserSlice';
+import Applicants from '../Components/Applicants';
+import JobPosting from '../Components/JobPosting';
+import { useNavigate } from "react-router-dom"
+// import {fetchJobPosting} from "../store/Slice/JobSlice"
 export default function EmployerDashboard() {
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState('applicants');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { userInfo} =  useSelector((state) => state.auth)
+  const navigate = useNavigate()
   const dispatch = useDispatch();
-  console.log(userInfo);
+
+  useEffect(() => {
+    if(userInfo.userType !== "employer"){
+      console.log(userInfo.userType) ;
+      navigate("/user_dashboard") 
+    }
+  } , [userInfo.userType])
+
   const [employData , setEmployData] =  useState({
     fullName : userInfo.fullName || "",
     email : userInfo.email || "",
@@ -23,10 +35,7 @@ export default function EmployerDashboard() {
 
   function handleInputChange(e) {
     const { id, value } = e.target;
-    setEmployData(prevData => ({
-      ...prevData,
-      [id]: value
-    }));
+    setEmployData(prevData => ({...prevData,[id]: value }));
   }
 
   function handelSubmit() {
@@ -95,15 +104,15 @@ export default function EmployerDashboard() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Sidebar */}
-          <div className={`lg:col-span-1 ${isMobileMenuOpen ? 'block' : 'hidden lg:block'}`}>
+          <div className={` lg:col-span-1 ${isMobileMenuOpen ? 'block' : 'hidden lg:block'}`}>
             <div className="bg-white rounded-2xl shadow-xl p-6 border-2 border-[#DADAD9]">
               <div className="text-center mb-6">
                 <div className="h-24 w-24 bg-[#F06449] rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
                   <Building2 className="h-12 w-12 text-white" />
                 </div>
-                <h2 className="text-xl font-bold text-[#36382E]">Tech Corp</h2>
-                <p className="text-[#36382E]/70">hr@techcorp.com</p>
-                <button className="mt-4 text-[#F06449] hover:text-[#36382E] font-medium text-sm flex items-center space-x-1 mx-auto">
+                <h2 className="text-xl font-bold text-[#36382E]">{employData.fullName}</h2>
+                <p className="text-[#36382E]/70">{employData.email}</p>
+                <button onClick={()=>{ setActiveTab("settings") }} className="mt-4 cursor-pointer text-[#F06449] hover:text-[#36382E] font-medium text-sm flex items-center space-x-1 mx-auto">
                   <Edit className="h-4 w-4" />
                   <span>Edit Profile</span>
                 </button>
@@ -112,7 +121,7 @@ export default function EmployerDashboard() {
               <nav className="space-y-2">
                 <button
                   onClick={() => setActiveTab('overview')}
-                  className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'overview'
+                  className={` cursor-pointer w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'overview'
                     ? 'bg-[#F06449] text-white font-bold'
                     : 'text-[#36382E]/70 hover:bg-[#EDE6E3]'
                     }`}
@@ -122,7 +131,7 @@ export default function EmployerDashboard() {
                 </button>
                 <button
                   onClick={() => setActiveTab('jobs')}
-                  className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'jobs'
+                  className={` cursor-pointer w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'jobs'
                     ? 'bg-[#F06449] text-white font-bold'
                     : 'text-[#36382E]/70 hover:bg-[#EDE6E3]'
                     }`}
@@ -132,7 +141,7 @@ export default function EmployerDashboard() {
                 </button>
                 <button
                   onClick={() => setActiveTab('applicants')}
-                  className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'applicants'
+                  className={` cursor-pointer w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'applicants'
                     ? 'bg-[#F06449] text-white font-bold'
                     : 'text-[#36382E]/70 hover:bg-[#EDE6E3]'
                     }`}
@@ -142,7 +151,7 @@ export default function EmployerDashboard() {
                 </button>
                 <button
                   onClick={() => setActiveTab('settings')}
-                  className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'settings'
+                  className={`cursor-pointer w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${activeTab === 'settings'
                     ? 'bg-[#F06449] text-white font-bold'
                     : 'text-[#36382E]/70 hover:bg-[#EDE6E3]'
                     }`}
@@ -155,7 +164,7 @@ export default function EmployerDashboard() {
           </div>
 
           {/* Main Content */}
-          <div className="lg:col-span-3">
+          <div className="lg:col-span-3 ">
             {/* Overview Tab */}
             {activeTab === 'overview' && (
               <div className="space-y-6">
@@ -257,128 +266,10 @@ export default function EmployerDashboard() {
             )}
 
             {/* Job Postings Tab */}
-            {activeTab === 'jobs' && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <h1 className="text-3xl font-bold text-[#36382E]">Job Postings</h1>
-                  <Link to="post-job">
-                    <button className="bg-[#F06449] text-white px-6 py-3 rounded-lg font-bold hover:shadow-lg transform hover:scale-105 transition-all flex items-center space-x-2">
-                      <Plus className="h-5 w-5" />
-                      <span>Post New Job</span>
-                    </button>
-                  </Link>
-                </div>
-
-                <div className="space-y-4">
-                  {jobPostings.map((job) => (
-                    <div key={job.id} className="bg-white rounded-xl shadow-xl p-6 border-2 border-[#DADAD9] hover:shadow-2xl transition-shadow">
-                      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                        <div className="flex-1">
-                          <div className="flex items-center space-x-3 mb-2">
-                            <h3 className="text-xl font-bold text-[#36382E]">{job.title}</h3>
-                            <span className={`px-3 py-1 rounded-full text-xs font-bold border ${getStatusColor(job.status)}`}>
-                              {job.status.toUpperCase()}
-                            </span>
-                          </div>
-                          <div className="flex flex-wrap gap-4 text-sm text-[#36382E]/60 mb-3">
-                            <span className="flex items-center space-x-1">
-                              <MapPin className="h-4 w-4" />
-                              <span>{job.location}</span>
-                            </span>
-                            <span className="flex items-center space-x-1">
-                              <DollarSign className="h-4 w-4" />
-                              <span>{job.salary}</span>
-                            </span>
-                            <span className="flex items-center space-x-1">
-                              <Clock className="h-4 w-4" />
-                              <span>Posted {job.posted}</span>
-                            </span>
-                          </div>
-                          <div className="flex gap-6 text-sm">
-                            <span className="text-[#5BC3EB] font-bold">{job.applications} Applications</span>
-                            <span className="text-[#36382E]/70">{job.views} Views</span>
-                          </div>
-                        </div>
-                        <div className="flex flex-col space-y-2">
-                          <button className="flex items-center space-x-2 bg-[#5BC3EB] text-[#36382E] px-4 py-2 rounded-lg font-medium hover:shadow-lg transition-all">
-                            <Eye className="h-4 w-4" />
-                            <span>View Details</span>
-                          </button>
-                          <div className="flex space-x-2">
-                            <button className="flex-1 p-2 text-[#5BC3EB] hover:bg-[#5BC3EB]/10 rounded-lg transition-colors">
-                              <Edit className="h-5 w-5" />
-                            </button>
-                            <button className="flex-1 p-2 text-[#F06449] hover:bg-[#F06449]/10 rounded-lg transition-colors">
-                              <Trash2 className="h-5 w-5" />
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+            {activeTab === 'jobs' && <JobPosting/>}
 
             {/* Applicants Tab */}
-            {activeTab === 'applicants' && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <h1 className="text-3xl font-bold text-[#36382E]">All Applicants</h1>
-                  <div className="flex space-x-2">
-                    <button className="flex items-center space-x-2 px-4 py-2 bg-white border-2 border-[#DADAD9] rounded-lg hover:bg-[#EDE6E3] transition-colors">
-                      <Search className="h-5 w-5 text-[#36382E]" />
-                      <span className="text-[#36382E] font-medium">Search</span>
-                    </button>
-                    <button className="flex items-center space-x-2 px-4 py-2 bg-white border-2 border-[#DADAD9] rounded-lg hover:bg-[#EDE6E3] transition-colors">
-                      <Filter className="h-5 w-5 text-[#36382E]" />
-                      <span className="text-[#36382E] font-medium">Filter</span>
-                    </button>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  {allApplicants.map((applicant) => (
-                    <div key={applicant.id} className="bg-white rounded-xl shadow-xl p-6 border-2 border-[#DADAD9] hover:shadow-2xl transition-shadow">
-                      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                        <div className="flex items-start space-x-4 flex-1">
-                          <div className="h-16 w-16 bg-[#5BC3EB] rounded-full flex items-center justify-center flex-shrink-0">
-                            <User className="h-8 w-8 text-[#36382E]" />
-                          </div>
-                          <div className="flex-1">
-                            <h3 className="text-xl font-bold text-[#36382E] mb-1">{applicant.name}</h3>
-                            <p className="text-[#36382E]/70 font-medium mb-2">Applied for: {applicant.position}</p>
-                            <div className="flex flex-wrap gap-3 text-sm text-[#36382E]/60">
-                              <span className="flex items-center space-x-1">
-                                <Briefcase className="h-4 w-4" />
-                                <span>{applicant.experience} experience</span>
-                              </span>
-                              <span>📧 {applicant.email}</span>
-                              <span>📱 {applicant.phone}</span>
-                            </div>
-                            <p className="text-xs text-[#36382E]/50 mt-2">Applied on {applicant.appliedDate}</p>
-                          </div>
-                        </div>
-                        <div className="flex flex-col items-end space-y-2">
-                          <span className={`px-4 py-2 rounded-lg text-sm font-bold border flex items-center space-x-2 ${getStatusColor(applicant.status)}`}>
-                            {getStatusIcon(applicant.status)}
-                            <span className="capitalize">{applicant.status}</span>
-                          </span>
-                          <div className="flex space-x-2">
-                            <button className="px-4 py-2 bg-[#5BC3EB] text-[#36382E] rounded-lg font-medium hover:shadow-lg transition-all text-sm">
-                              View Resume
-                            </button>
-                            <button className="px-4 py-2 bg-[#F06449] text-white rounded-lg font-medium hover:shadow-lg transition-all text-sm">
-                              Contact
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+            {activeTab === 'applicants' &&  <Applicants />}
 
             {/* Settings Tab */}
             {activeTab === 'settings' && (

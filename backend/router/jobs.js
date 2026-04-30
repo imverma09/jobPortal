@@ -3,7 +3,8 @@ const express = require('express');
 const { body, validationResult } = require('express-validator');
 const Job = require('../model/job');
 const router = express.Router();
-
+const  { authenticate } =  require("../middleware/authMiddleware"); 
+const job = require('../model/job');
 router.post('/postJob',
 
   [
@@ -89,6 +90,28 @@ router.get('/getJob', async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 });
+
+router.get("/fetchJobPosting" , authenticate , async ( req , res )=>{
+       const userId =   req.userId
+       try{
+         let response =   await Job.find({createdBy :  userId})
+         res.status(200).json(response)
+       }catch(error){
+         console.log(error)
+         res.status(500).json({ message: 'Server error' });
+       } 
+} )
+
+router.delete("/deleteJob/:jobId" , authenticate  , async(req , res)=>{
+  let jobId  =  req.params.jobId
+  try{
+     await Job.findOneAndDelete({_id : jobId})
+    res.status(200).json({message : " job delete successful ! "})
+  }catch(error){
+    console.log(error)
+    res.status(500).json({ message: 'Server error' });
+  }
+})
 
 // router.get('/:id', async (req, res) => {
 //   try {
