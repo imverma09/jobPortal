@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 export default function SignInPage() {
   let navigate = useNavigate()
+  const [isLoading , setIsLoading] =  useState(false)
   const {isAuthenticated } =  useSelector((state) => state.auth)
   if(isAuthenticated){
     navigate("/")
@@ -31,6 +32,7 @@ export default function SignInPage() {
 
   const handleSubmit = async () => {
     try {
+      setIsLoading(true)
       const res = await axios.post(`${BACKEND_API}/api/users/login`, formData, {
         withCredentials: true
       });
@@ -42,6 +44,8 @@ export default function SignInPage() {
     } catch (error) {
       console.log(error)
       showError(error.response?.data?.message || "Error submitting form");
+    } finally {
+      setIsLoading(false)
     }
   };
 
@@ -159,10 +163,21 @@ export default function SignInPage() {
             <button
               type="button"
               onClick={handleSubmit}
-              className="w-full bg-[#5BC3EB] text-[#36382E] py-3 rounded-lg font-bold transition-all hover:shadow-lg transform hover:scale-105 flex items-center justify-center space-x-2"
+              className="w-full cursor-pointer bg-[#5BC3EB] text-[#36382E] py-3 rounded-lg font-bold transition-all hover:shadow-lg transform hover:scale-105 flex items-center justify-center space-x-2"
             >
-              <span>Sign In</span>
-              <ArrowRight className="h-5 w-5" />
+              {
+                isLoading ? (
+                  <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                  </svg>
+                ) : (
+                  <>
+                    <span>Sign In</span>
+                    <ArrowRight className="h-5 w-5" />
+                  </>
+                )
+              }
             </button>
           </div>
 

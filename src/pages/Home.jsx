@@ -47,32 +47,6 @@ function Hom() {
         <p className="max-w-2xl mx-auto text-lg text-gray-600 mb-10">
           Search thousands of verified roles, browse trusted employers, and apply quickly with one polished profile.
         </p>
-
-        <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl p-5 sm:p-6">
-          <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-4 items-center">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex items-center gap-3 px-4 py-4 bg-gray-50 rounded-2xl">
-                <Search className="h-5 w-5 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Job title, keywords, or company"
-                  className="flex-1 bg-transparent outline-none text-gray-700"
-                />
-              </div>
-              <div className="flex items-center gap-3 px-4 py-4 bg-gray-50 rounded-2xl">
-                <Building2 className="h-5 w-5 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="City, state, or remote"
-                  className="flex-1 bg-transparent outline-none text-gray-700"
-                />
-              </div>
-            </div>
-            <button className="w-full md:w-auto bg-[#5BC3EB] text-white px-10 py-4 rounded-2xl font-semibold hover:bg-[#46A9DD] hover:shadow-lg transition-all">
-              Search Jobs
-            </button>
-          </div>
-        </div>
       </section>
 
       <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
