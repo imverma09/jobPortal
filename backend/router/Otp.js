@@ -5,19 +5,18 @@ const otpGenerator = require("otp-generator");
 const nodemailer = require("nodemailer");
 const dotenv = require("dotenv");
 const User = require("../model/userModel");
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt');  
+const sgMail =  require("../config/sendGrid");
+const rateLimit =  require("express-rate-limit")
 dotenv.config();
 
-// ✅ Email Transporter
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+const otpLimiter =  rateLimit({
+  windowMs :  60 * 1 * 1000, 
+  max : 3 , 
+  message : "Too many OTP requests, try again later"
+})
 
-router.post("/send-otp", async (req, res) => {
+router.post("/send-otp", otpLimiter , async (req, res) => {
   const { email } = req.body;
   // Delete old OTPs for same email
   await Otp.deleteMany({ email });
@@ -31,7 +30,7 @@ router.post("/send-otp", async (req, res) => {
 
   const newOtp = new Otp({ email, otp, expiresAt });
   await newOtp.save();
-
+   console.log("to : "  , email , "from" , process.env.EMAIL_USER  ,  otp)
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: email,
@@ -39,10 +38,11 @@ router.post("/send-otp", async (req, res) => {
     text: `Your OTP is ${otp}. It will expire in 10 minutes.`,
   };
   try {
-    await transporter.sendMail(mailOptions);
+    await sgMail.send(mailOptions)
     res.json({ success: true, message: "OTP sent successfully!" });
   } catch (err) {
-    console.error("Mail error:", err);
+    console.error("Full Error:", err.response?.body || err.message);
+    
     res.json({ success: false, message: "Failed to send OTP!" });
   }
 });
@@ -65,16 +65,24 @@ router.post("/verify-otp", async (req, res) => {
       message: "OTP expired. Please request again.",
     });
   }
-
+ let attempts = 0;
   if (record.otp === otp) {
     await Otp.deleteOne({ _id: record._id });
     return res.json({ success: true, message: "OTP verified successfully!" });
   } else {
+    attempts++;
+    if (attempts >= 5) {
+      await Otp.deleteOne({ _id: record._id });
+      return res.json({
+        success: false,
+        message: "Too many failed attempts. OTP invalidated.",
+      });
+    }
     return res.json({ success: false, message: "Invalid OTP!" });
   }
 });
 
-router.post("/forgot-password/send-otp", async (req, res) => {
+router.post("/forgot-password/send-otp", otpLimiter , async (req, res) => {
   try {
     const { email } = req.body;
 
@@ -93,6 +101,7 @@ router.post("/forgot-password/send-otp", async (req, res) => {
     const otp = otpGenerator.generate(6, {
       upperCaseAlphabets: false,
       specialChars: false,
+      lowerCaseAlphabets : false,
     });
 
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 min expiry
@@ -100,7 +109,7 @@ router.post("/forgot-password/send-otp", async (req, res) => {
     const newOtp = new Otp({ email, otp, expiresAt });
     await newOtp.save();
 
-    await transporter.sendMail({
+    await sgMail.send({
       from : process.env.EMAIL_USER, 
       to: email,
       subject: "Reset Password OTP",
@@ -125,6 +134,12 @@ router.post('/forgot-password/verify-otp', async (req, res) => {
     }
 
     if (user.otp !== otp) {
+      let attempts = 0;
+      attempts++;
+      if (attempts >= 5) {
+        await Otp.deleteOne({ _id: user._id });
+        return res.status(400).json({ success : false ,  message: 'Too many failed attempts. OTP invalidated.' });
+      }
       return res.status(400).json({success : false ,   message: 'Invalid OTP' });
     }
 
@@ -132,12 +147,12 @@ router.post('/forgot-password/verify-otp', async (req, res) => {
        await Otp.deleteOne({ _id: user._id });
        return res.status(400).json({ success : false ,  message: 'OTP expired' });
       }
-      
       const hashedPassword = await bcrypt.hash(newPassword, 10);
       await   User.findOneAndUpdate({email} , {password : hashedPassword})
       await Otp.deleteOne({ _id: user._id });
     res.json({ success : true ,  message: 'Password has been reset successfully! 🎉' });
   } catch (error) {
+
     console.error('Error resetting password:', error);
     res.status(500).json({ success : false ,  message: 'Error resetting password' });
   }

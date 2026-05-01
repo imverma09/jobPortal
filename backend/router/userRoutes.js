@@ -34,12 +34,15 @@ router.post("/register", async (req, res) => {
     });
     await newUser.save();
     // console.log(newUser)
-    await Employer.create({
-      userId : newUser._id,
-      companyName : company || "",
-    });
+    if(userType === "employer"){
+      await Employer.create({
+        userId : newUser._id,
+        companyName : company || "zyxCompany",
+      });
+    }
     res.status(201).json({ message: "User registered successfully!" });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 });
