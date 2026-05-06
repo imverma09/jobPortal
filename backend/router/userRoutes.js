@@ -4,9 +4,9 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const dotenv = require("dotenv");
 const jwt = require("jsonwebtoken");
-const Employer =   require("../model/employer");
+const Employer = require("../model/employer");
 dotenv.config();
-const { authenticate } = require('../middleware/authMiddleware');
+const { authenticate } = require("../middleware/authMiddleware");
 const employer = require("../model/employer");
 
 router.post("/register", async (req, res) => {
@@ -21,7 +21,8 @@ router.post("/register", async (req, res) => {
       return res.status(400).json({ message: "Passwords do not match" });
 
     const existingUser = await User.findOne({ email });
-    if (existingUser)return res.status(400).json({ message: "Email already registered" });
+    if (existingUser)
+      return res.status(400).json({ message: "Email already registered" });
     const salt = await bcrypt.genSalt(10);
     const newPassword = await bcrypt.hash(password, salt);
 
@@ -34,10 +35,10 @@ router.post("/register", async (req, res) => {
     });
     await newUser.save();
     // console.log(newUser)
-    if(userType === "employer"){
+    if (userType === "employer") {
       await Employer.create({
-        userId : newUser._id,
-        companyName : company || "zyxCompany",
+        userId: newUser._id,
+        companyName: company || "zyxCompany",
       });
     }
     res.status(201).json({ message: "User registered successfully!" });
@@ -69,13 +70,13 @@ router.post("/login", async (req, res) => {
     const token = jwt.sign(
       { id: user._id, email: user.email }, // payload
       process.env.JWT_SECRET, // secret key
-      { expiresIn: "2h" } // token expires in 2 hours
+      { expiresIn: "2h" }, // token expires in 2 hours
     );
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false,
-      sameSite: "strict",
+      secure: true,
+      sameSite: "None",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -95,27 +96,28 @@ router.post("/login", async (req, res) => {
   }
 });
 
-
 router.get("/userInfo", authenticate, async (req, res) => {
   try {
-    const employerData = await Employer.findOne({ userId : req.userId });
-    if(employerData){ 
-      let data = await Employer.findOne({ userId : req.userId }).populate("userId" , "fullName email userType phone");
+    const employerData = await Employer.findOne({ userId: req.userId });
+    if (employerData) {
+      let data = await Employer.findOne({ userId: req.userId }).populate(
+        "userId",
+        "fullName email userType phone",
+      );
       return res.status(200).json({
         id: data.userId._id,
         fullName: data.userId.fullName,
         email: data.userId.email,
         userType: data.userId.userType,
-        phone: data.userId.phone , 
-        company : data.companyName,
-        website : data.companyWebsite,
-        about : data.about
+        phone: data.userId.phone,
+        company: data.companyName,
+        website: data.companyWebsite,
+        about: data.about,
       });
-
     }
 
     let data = await User.findOne({ _id: req.userId });
-    
+
     if (!data) {
       return res.status(400).json({ error: "user not Found !" });
     }
@@ -125,7 +127,7 @@ router.get("/userInfo", authenticate, async (req, res) => {
       email: data.email,
       company: data.company,
       userType: data.userType,
-      phone: data.phone
+      phone: data.phone,
     });
   } catch (error) {
     console.log(error);
@@ -160,16 +162,19 @@ router.get("/logout", async (req, res) => {
 
 router.put("/updateProfile", authenticate, async (req, res) => {
   try {
-    
-    const { fullName, email, company, userType, phone , website , about } = req.body;
-    const isEmployer = await Employer.findOne({ userId : req.userId });
-    if(isEmployer){
+    const { fullName, email, company, userType, phone, website, about } =
+      req.body;
+    const isEmployer = await Employer.findOne({ userId: req.userId });
+    if (isEmployer) {
       await User.findByIdAndUpdate(req.userId, {
         fullName,
         email,
         phone,
       });
-      await Employer.findOneAndUpdate({ userId : req.userId }, { companyName : company , companyWebsite : website , about });
+      await Employer.findOneAndUpdate(
+        { userId: req.userId },
+        { companyName: company, companyWebsite: website, about },
+      );
       return res.status(200).json({ message: "Profile updated successfully!" });
     }
     const user = await User.findByIdAndUpdate(req.userId, {
