@@ -1,5 +1,5 @@
-export let BACKEND_API = "http://localhost:5000"
-// export let BACKEND_API = "https://jobportal-av2a.onrender.com"
+// export let BACKEND_API = "http://localhost:5000"
+export let BACKEND_API = "https://jobportal-av2a.onrender.com"
 
 export function showError(msg) {
   const alertDiv = document.createElement('div');
