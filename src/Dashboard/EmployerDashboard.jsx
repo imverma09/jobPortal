@@ -39,6 +39,11 @@ export default function EmployerDashboard() {
   }
 
   function handelSubmit() {
+        const  regex = /^[6-9]\d{9}$/;
+        if (!regex.test(employData.phone)) {
+          showError("Invalid phone number. Please enter a valid 10-digit phone number.");
+          return;
+        }
      dispatch(updateProfile(employData))
   }
 

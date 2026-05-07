@@ -30,8 +30,9 @@ export default function UserDashboard() {
       showError("Full name is required.");
       return;
     }
-    if (profile.phone.length !== 10) {
-      showError("Invalid phone number. Please enter a 10-digit phone number.");
+    const  regex = /^[6-9]\d{9}$/;
+    if (!regex.test(profile.phone)) {
+      showError("Invalid phone number. Please enter a valid 10-digit phone number.");
       return;
     }
     dispatch(updateProfile(profile))

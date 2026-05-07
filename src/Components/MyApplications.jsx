@@ -6,6 +6,7 @@ import {
   MapPin,
   IndianRupee,
   Building2,
+  Loader,
 } from "lucide-react";
 import { getStatusColor, getStatusIcon } from "../Helper/myApplication";
 import { deleteApplication } from "../store/Slice/ApplicationSlice";
@@ -16,7 +17,7 @@ function MyApplications({ application, isLoading, isError }) {
     <div className="space-y-6">
       <h1 className="text-3xl font-bold text-[#36382E]">My Applications</h1>
       <div className="space-y-4">
-        {isLoading && <p>Loading...</p>}
+        {isLoading && <Loader/>}
         {isError && <p>Error: {isError}</p>}
         {application.length === 0 && <p>No applications found</p>}
         {application.map((app) => (

@@ -7,6 +7,7 @@ export const fetchUserInfo = createAsyncThunk("fetchUserInfo", async (_, { rejec
         const data = await axios.get(`${BACKEND_API}/api/users/userInfo`, {
             withCredentials: true
         })
+        console.log(data.data)
         return data.data
     } catch (error) {
         if (error?.response?.status === 400) {

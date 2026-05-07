@@ -2,31 +2,30 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { BACKEND_API  , showSuccess , showError } from "../../Helper/backendApi"
 
-export const fetchApplication = createAsyncThunk("fetchApplication", async (  ) => {
+export const fetchApplication = createAsyncThunk("fetchApplication", async ( __ ,  { rejectWithValue }  ) => {
     try {
         const res = await axios.get(`${BACKEND_API}/api/applications/my-applications`, {
             withCredentials: true
         })
         return res.data
     } catch (error) {
-        return ({ msg: "server Error" })
+        return rejectWithValue({ msg: "server Error" })
     }
 })
 
 
-export const fetchSavedJob = createAsyncThunk("fetchSavedJob", async () => {
+export const fetchSavedJob = createAsyncThunk("fetchSavedJob", async ( __ ,  { rejectWithValue }  ) => {
     try {
         const res = await axios.get(`${BACKEND_API}/api/saveJob`, {
             withCredentials: true
         })
         return res.data
     } catch (error) {
-        console.log(error)
-        return ({ msg: "server Error" })
+        return rejectWithValue({ msg: "server Error" })
     }
 })
 
-export const toggleSaveJob = createAsyncThunk("toggleSaveJob", async (jobId) => {
+export const toggleSaveJob = createAsyncThunk("toggleSaveJob", async (jobId, { rejectWithValue }) => {
     try {
         const res = await axios.post(`${BACKEND_API}/api/saveJob`, { jobId }, {
             withCredentials: true
@@ -34,7 +33,7 @@ export const toggleSaveJob = createAsyncThunk("toggleSaveJob", async (jobId) => 
         return res.data
     } catch (error) {
         console.log(error)
-        return ({ msg: "server Error" })
+        return rejectWithValue({ msg: "server Error" })
     }
 }) 
 export  const deleteApplication =  createAsyncThunk("deleteApplication" ,async ( applicationId , {rejectWithValue})=>{
@@ -73,8 +72,8 @@ const applicationSlice = createSlice({
         })
         builder.addCase(fetchApplication.rejected, (state, action) => {
             state.isLoading = false
-            console.log("Error " + action.payload)
-            state.isError = action.payload
+            state.application = []
+            state.isError = action.payload.msg
         })
         builder.addCase(fetchSavedJob.fulfilled, (state, action) => {
             state.isLoading = false
@@ -90,7 +89,7 @@ const applicationSlice = createSlice({
             state.isError = action.payload
         })
         builder.addCase( toggleSaveJob.pending , ( state  , action)=>{
-            // console.log(action.payload)
+            console.log(action.payload)
         })
         builder.addCase(toggleSaveJob.fulfilled , (state , action)=>{  
              let id = action.meta.arg._id

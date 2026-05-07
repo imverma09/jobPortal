@@ -15,8 +15,7 @@ function Applicants() {
     } , [])
 
     return (
-        <div className="space-y-6">
-           
+        <div className="space-y-6"> 
                 <div className="flex items-center justify-between">
                   <h1 className="text-3xl font-bold text-[#36382E]">All Applicants</h1>
                   <div className="flex space-x-2">
